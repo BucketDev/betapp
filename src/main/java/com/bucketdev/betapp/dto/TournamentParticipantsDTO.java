@@ -1,26 +1,24 @@
 package com.bucketdev.betapp.dto;
 
-import com.bucketdev.betapp.type.TournamentPrivacy;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * @author rodrigo.loyola
  */
 @Getter
 @Setter
-public class TournamentDTO {
+public class TournamentParticipantsDTO {
 
     private long id;
     private String uid;
     private String title;
     private String photoUrl;
-    private TournamentPrivacy tournamentPrivacy;
-    private boolean tournamentGroups;
-    private boolean tournamentTeams;
     private Date creationDate;
     private long userCreationId;
+    private Set<UserDTO> participants;
 
 }

@@ -8,12 +8,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class UserDTO {
+public class PoolSettingsDTO {
 
     private long id;
-    private String uid;
-    private String email;
-    private String displayName;
-    private String photoUrl;
+
 
 }

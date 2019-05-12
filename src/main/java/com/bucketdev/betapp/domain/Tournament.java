@@ -20,7 +20,7 @@ public class Tournament {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long tournamentId;
+    private long id;
 
     @NotNull
     @Column
@@ -51,12 +51,12 @@ public class Tournament {
     private Date creationDate;
 
     @ManyToOne
-    private User creationUser;
+    private User userCreation;
 
     public TournamentDTO toDTO() {
         TournamentDTO dto = new TournamentDTO();
 
-        dto.setTournamentId(tournamentId);
+        dto.setId(id);
         dto.setUid(uid);
         dto.setTitle(title);
         dto.setPhotoUrl(photoUrl);
@@ -64,7 +64,7 @@ public class Tournament {
         dto.setCreationDate(creationDate);
         dto.setTournamentGroups(tournamentGroups);
         dto.setTournamentTeams(tournamentTeams);
-        dto.setUserCreationId(creationUser.toDTO().getUserId());
+        dto.setUserCreationId(userCreation.getId());
 
         return dto;
     }

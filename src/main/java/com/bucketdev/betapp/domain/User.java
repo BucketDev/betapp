@@ -18,7 +18,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userId;
+    private long id;
 
     @Column
     @NotNull
@@ -37,7 +37,7 @@ public class User {
     public UserDTO toDTO() {
         UserDTO dto = new UserDTO();
 
-        dto.setUserId(userId);
+        dto.setId(id);
         dto.setUid(uid);
         dto.setEmail(email);
         dto.setDisplayName(displayName);

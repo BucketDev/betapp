@@ -1,10 +1,14 @@
 package com.bucketdev.betapp.service.impl;
 
+import com.bucketdev.betapp.domain.Participants;
 import com.bucketdev.betapp.domain.Tournament;
+import com.bucketdev.betapp.domain.TournamentParticipants;
 import com.bucketdev.betapp.domain.User;
 import com.bucketdev.betapp.dto.TournamentDTO;
 import com.bucketdev.betapp.exception.tournament.TournamentNotFoundException;
 import com.bucketdev.betapp.exception.user.UserNotFoundException;
+import com.bucketdev.betapp.repository.ParticipantsRepository;
+import com.bucketdev.betapp.repository.TournamentParticipantsRepository;
 import com.bucketdev.betapp.repository.TournamentRepository;
 import com.bucketdev.betapp.repository.UserRepository;
 import com.bucketdev.betapp.service.TournamentService;
@@ -27,12 +31,15 @@ public class TournamentServiceImpl implements TournamentService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ParticipantsRepository participantsRepository;
+
     public TournamentDTO save(TournamentDTO dto) {
         Tournament tournament = new Tournament();
-        if(dto.getTournamentId() > 0) {
-            Optional<Tournament> tournamentOptional = repository.findById(dto.getTournamentId());
+        if(dto.getId() > 0) {
+            Optional<Tournament> tournamentOptional = repository.findById(dto.getId());
             if(!tournamentOptional.isPresent())
-                throw new TournamentNotFoundException("id: " + dto.getTournamentId());
+                throw new TournamentNotFoundException("id: " + dto.getId());
             tournament = tournamentOptional.get();
         } else {
             Optional<User> optionalUser = userRepository.findById(dto.getUserCreationId());
@@ -41,10 +48,20 @@ public class TournamentServiceImpl implements TournamentService {
             }
             tournament.setUid(UUID.randomUUID().toString());
             tournament.setCreationDate(new Date());
-            tournament.setCreationUser(optionalUser.get());
+            tournament.setUserCreation(optionalUser.get());
         }
         tournament.setValuesFromDTO(dto);
-        return repository.save(tournament).toDTO();
+        tournament = repository.save(tournament);
+
+        //add the creation user to the tournament by default
+        if(dto.getId() == 0) {
+            Participants participants = new Participants();
+            participants.setTournament(tournament);
+            participants.setUser(tournament.getUserCreation());
+            participantsRepository.save(participants);
+        }
+
+        return tournament.toDTO();
     }
 
 }

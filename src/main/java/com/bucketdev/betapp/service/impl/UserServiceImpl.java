@@ -22,10 +22,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO save(UserDTO dto) {
         User user = new User();
-        if(dto.getUserId() > 0) {
-            Optional<User> userOptional = repository.findById(dto.getUserId());
+        if(dto.getId() > 0) {
+            Optional<User> userOptional = repository.findById(dto.getId());
             if(!userOptional.isPresent())
-                throw new UserNotFoundException("id: " + dto.getUserId());
+                throw new UserNotFoundException("id: " + dto.getId());
             user = userOptional.get();
         }
         user.setValuesFromDTO(dto);
