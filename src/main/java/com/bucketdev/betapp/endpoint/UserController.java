@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 /**
  * @author rodrigo.loyola
  */
@@ -22,9 +24,14 @@ public class UserController {
         return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{uid}")
+    @GetMapping("/uid/{uid}")
     public ResponseEntity<UserDTO> findByUid(@PathVariable String uid) {
         return new ResponseEntity<>(service.findByUid(uid), HttpStatus.OK);
+    }
+
+    @GetMapping("/displayName/{name}")
+    public ResponseEntity<Set<UserDTO>> findByDisplayName(@PathVariable String name) {
+        return new ResponseEntity<>(service.findByDisplayName(name), HttpStatus.OK);
     }
 
 }

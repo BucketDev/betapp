@@ -1,14 +1,12 @@
 package com.bucketdev.betapp.endpoint;
 
 import com.bucketdev.betapp.dto.TournamentDTO;
+import com.bucketdev.betapp.dto.UserDTO;
 import com.bucketdev.betapp.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author rodrigo.loyola
@@ -23,6 +21,11 @@ public class TournamentController {
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity<TournamentDTO> upsert(@RequestBody TournamentDTO dto) {
         return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{id}/participants")
+    public ResponseEntity<UserDTO> addParticipant(@PathVariable long id, @RequestBody UserDTO userDTO) {
+        return new ResponseEntity<>(service.addParticipant(id, userDTO), HttpStatus.CREATED);
     }
 
 }

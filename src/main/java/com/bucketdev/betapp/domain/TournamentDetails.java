@@ -1,6 +1,6 @@
 package com.bucketdev.betapp.domain;
 
-import com.bucketdev.betapp.dto.TournamentParticipantsDTO;
+import com.bucketdev.betapp.dto.TournamentDetailsDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,13 +11,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @author rodrigo.loyola
+ * @author
  */
 @Entity
 @Table(name = "tournaments")
 @Getter
 @Setter
-public class TournamentParticipants {
+public class TournamentDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,9 +36,9 @@ public class TournamentParticipants {
 
     @NotNull
     @Column
+    @Temporal(value = TemporalType.DATE)
     private Date creationDate;
 
-    @NotNull
     @ManyToOne
     private User userCreation;
 
@@ -49,8 +49,11 @@ public class TournamentParticipants {
     )
     private Set<User> participants;
 
-    public TournamentParticipantsDTO toDTO() {
-        TournamentParticipantsDTO dto = new TournamentParticipantsDTO();
+    @OneToOne(mappedBy = "tournament", cascade = CascadeType.ALL, optional = false)
+    private PoolSettings poolSettings;
+
+    public TournamentDetailsDTO toDTO() {
+        TournamentDetailsDTO dto = new TournamentDetailsDTO();
 
         dto.setId(id);
         dto.setUid(uid);
@@ -59,6 +62,8 @@ public class TournamentParticipants {
         dto.setCreationDate(creationDate);
         dto.setUserCreationId(userCreation.getId());
         dto.setParticipants(participants.stream().map(User::toDTO).collect(Collectors.toSet()));
+        if(poolSettings != null)
+            dto.setPoolSettings(poolSettings.toDTO());
 
         return dto;
     }

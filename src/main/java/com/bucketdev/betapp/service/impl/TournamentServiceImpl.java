@@ -5,6 +5,7 @@ import com.bucketdev.betapp.domain.Tournament;
 import com.bucketdev.betapp.domain.TournamentParticipants;
 import com.bucketdev.betapp.domain.User;
 import com.bucketdev.betapp.dto.TournamentDTO;
+import com.bucketdev.betapp.dto.UserDTO;
 import com.bucketdev.betapp.exception.tournament.TournamentNotFoundException;
 import com.bucketdev.betapp.exception.user.UserNotFoundException;
 import com.bucketdev.betapp.repository.ParticipantsRepository;
@@ -62,6 +63,26 @@ public class TournamentServiceImpl implements TournamentService {
         }
 
         return tournament.toDTO();
+    }
+
+    @Override
+    public UserDTO addParticipant(long id, UserDTO userDTO) {
+        Optional<User> optionalUser = userRepository.findById(userDTO.getId());
+        if(!optionalUser.isPresent())
+            throw  new UserNotFoundException("id: " + userDTO.getId());
+        User user = optionalUser.get();
+
+        Optional<Tournament> optionalTournament = repository.findById(id);
+        if(!optionalTournament.isPresent())
+            throw new TournamentNotFoundException("id: " + id);
+        Tournament tournament = optionalTournament.get();
+
+        Participants participants = new Participants();
+        participants.setUser(user);
+        participants.setTournament(tournament);
+        participantsRepository.save(participants);
+
+        return user.toDTO();
     }
 
 }

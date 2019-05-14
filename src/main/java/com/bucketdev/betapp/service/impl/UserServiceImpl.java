@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author rodrigo.loyola
@@ -35,6 +37,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findByUid(String uid) {
         return repository.findByUid(uid).toDTO();
+    }
+
+    @Override
+    public Set<UserDTO> findByDisplayName(String name) {
+        return repository.findByDisplayNameContaining(name).stream().map(User::toDTO).collect(Collectors.toSet());
     }
 
 }
