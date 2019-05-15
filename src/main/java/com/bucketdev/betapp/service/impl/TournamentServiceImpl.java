@@ -16,6 +16,7 @@ import com.bucketdev.betapp.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -48,7 +49,7 @@ public class TournamentServiceImpl implements TournamentService {
                 throw new UserNotFoundException("id: " + dto.getUserCreationId());
             }
             tournament.setUid(UUID.randomUUID().toString());
-            tournament.setCreationDate(new Date());
+            tournament.setCreationDate(Calendar.getInstance());
             tournament.setUserCreation(optionalUser.get());
         }
         tournament.setValuesFromDTO(dto);

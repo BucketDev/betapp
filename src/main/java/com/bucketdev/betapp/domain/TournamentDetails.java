@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,8 +36,12 @@ public class TournamentDetails {
 
     @NotNull
     @Column
+    private boolean tournamentGroups;
+
+    @NotNull
+    @Column
     @Temporal(value = TemporalType.DATE)
-    private Date creationDate;
+    private Calendar creationDate;
 
     @ManyToOne
     private User userCreation;
@@ -52,6 +56,9 @@ public class TournamentDetails {
     @OneToOne(mappedBy = "tournament", cascade = CascadeType.ALL, optional = false)
     private PoolSettings poolSettings;
 
+    @OneToOne(mappedBy = "tournament", cascade = CascadeType.ALL, optional = false)
+    private TournamentSettings tournamentSettings;
+
     public TournamentDetailsDTO toDTO() {
         TournamentDetailsDTO dto = new TournamentDetailsDTO();
 
@@ -59,11 +66,14 @@ public class TournamentDetails {
         dto.setUid(uid);
         dto.setTitle(title);
         dto.setPhotoUrl(photoUrl);
+        dto.setTournamentGroups(tournamentGroups);
         dto.setCreationDate(creationDate);
         dto.setUserCreationId(userCreation.getId());
         dto.setParticipants(participants.stream().map(User::toDTO).collect(Collectors.toSet()));
         if(poolSettings != null)
             dto.setPoolSettings(poolSettings.toDTO());
+        if(tournamentSettings != null)
+            dto.setTournamentSettings(tournamentSettings.toDTO());
 
         return dto;
     }

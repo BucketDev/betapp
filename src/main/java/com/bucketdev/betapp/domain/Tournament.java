@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * @author rodrigo.loyola
@@ -48,7 +48,7 @@ public class Tournament {
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    private Date creationDate;
+    private Calendar creationDate;
 
     @ManyToOne
     private User userCreation;

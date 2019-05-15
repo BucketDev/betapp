@@ -1,16 +1,18 @@
 package com.bucketdev.betapp.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.util.Calendar;
 
 /**
  * @author rodrigo.loyola
  */
 @Getter
 @Setter
-public class PoolSettingsDTO {
+public class PoolSettingsDTO implements Serializable {
 
     private long id;
     private long tournamentId;
@@ -18,6 +20,7 @@ public class PoolSettingsDTO {
     private String description;
     private float amount;
     private float goal;
-    private Date limitDate;
+    @JsonFormat(timezone = "GMT-06:00")
+    private Calendar limitDate;
 
 }

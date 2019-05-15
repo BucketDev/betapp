@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * @author rodrigo.loyola
@@ -38,7 +38,7 @@ public class PoolSettings {
 
     @Column
     @Temporal(TemporalType.DATE)
-    private Date limitDate;
+    private Calendar limitDate;
 
     public PoolSettingsDTO toDTO() {
         PoolSettingsDTO dto = new PoolSettingsDTO();
