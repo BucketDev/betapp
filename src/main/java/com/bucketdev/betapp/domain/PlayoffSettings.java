@@ -1,7 +1,6 @@
 package com.bucketdev.betapp.domain;
 
 import com.bucketdev.betapp.dto.PlayoffSettingsDTO;
-import com.bucketdev.betapp.dto.TournamentSettingsDTO;
 import com.bucketdev.betapp.type.PlayoffStage;
 import lombok.Getter;
 import lombok.Setter;

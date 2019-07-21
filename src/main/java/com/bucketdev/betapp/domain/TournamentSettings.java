@@ -1,6 +1,5 @@
 package com.bucketdev.betapp.domain;
 
-import com.bucketdev.betapp.dto.PlayoffSettingsDTO;
 import com.bucketdev.betapp.dto.TournamentSettingsDTO;
 import com.bucketdev.betapp.type.PlayoffStage;
 import lombok.Getter;
@@ -21,6 +20,12 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class TournamentSettings {
+
+    public TournamentSettings() {
+        this.groupNumber = 1;
+        this.first = 1;
+        this.playoffStage = PlayoffStage.EIGHTH_FINALS;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

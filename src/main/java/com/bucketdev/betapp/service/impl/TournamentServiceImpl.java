@@ -1,23 +1,16 @@
 package com.bucketdev.betapp.service.impl;
 
-import com.bucketdev.betapp.domain.Participants;
-import com.bucketdev.betapp.domain.Tournament;
-import com.bucketdev.betapp.domain.TournamentParticipants;
-import com.bucketdev.betapp.domain.User;
+import com.bucketdev.betapp.domain.*;
 import com.bucketdev.betapp.dto.TournamentDTO;
 import com.bucketdev.betapp.dto.UserDTO;
 import com.bucketdev.betapp.exception.tournament.TournamentNotFoundException;
 import com.bucketdev.betapp.exception.user.UserNotFoundException;
-import com.bucketdev.betapp.repository.ParticipantsRepository;
-import com.bucketdev.betapp.repository.TournamentParticipantsRepository;
-import com.bucketdev.betapp.repository.TournamentRepository;
-import com.bucketdev.betapp.repository.UserRepository;
+import com.bucketdev.betapp.repository.*;
 import com.bucketdev.betapp.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,6 +28,12 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Autowired
     private ParticipantsRepository participantsRepository;
+
+    @Autowired
+    private TournamentSettingsRepository tournamentSettingsRepository;
+
+    @Autowired
+    private GroupRepository groupRepository;
 
     public TournamentDTO save(TournamentDTO dto) {
         Tournament tournament = new Tournament();
@@ -55,12 +54,25 @@ public class TournamentServiceImpl implements TournamentService {
         tournament.setValuesFromDTO(dto);
         tournament = repository.save(tournament);
 
-        //add the creation user to the tournament by default
-        if(dto.getId() == 0) {
+
+        if (dto.getId() == 0) {
+            //add the creation user to the tournament by default
             Participants participants = new Participants();
             participants.setTournament(tournament);
             participants.setUser(tournament.getUserCreation());
             participantsRepository.save(participants);
+
+            //create the default tournament settings
+            TournamentSettings tournamentSettings = new TournamentSettings();
+            tournamentSettings.setTournament(tournament);
+            tournamentSettingsRepository.save(tournamentSettings);
+
+            if (dto.isTournamentGroups()) {
+                //Create first default group
+                Group group = new Group('A');
+                group.setTournament(tournament);
+                groupRepository.save(group);
+            }
         }
 
         return tournament.toDTO();

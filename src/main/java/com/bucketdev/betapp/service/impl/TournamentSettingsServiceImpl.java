@@ -25,17 +25,23 @@ public class TournamentSettingsServiceImpl implements TournamentSettingsService 
     private TournamentRepository tournamentRepository;
 
     @Override
+    public TournamentSettingsDTO findByTournamentUid(String uid) {
+        TournamentSettings tournamentSettings = repository.findByTournamentUid(uid);
+        return tournamentSettings == null ? null : tournamentSettings.toDTO();
+    }
+
+    @Override
     public TournamentSettingsDTO upsert(TournamentSettingsDTO dto) {
-        TournamentSettings tournamentSettings = new TournamentSettings();
-        Optional<TournamentSettings> optionalTournamentSettings = repository.findByTournamentId(dto.getTournamentId());
-        if(optionalTournamentSettings.isPresent())
-            tournamentSettings = optionalTournamentSettings.get();
-        else {
-            Optional<Tournament> optionalTournament = tournamentRepository.findById(dto.getTournamentId());
-            if(!optionalTournament.isPresent())
-                throw new TournamentNotFoundException("id: " + dto.getTournamentId());
-            tournamentSettings.setTournament(optionalTournament.get());
+        Optional<Tournament> optionalTournament = tournamentRepository.findById(dto.getTournamentId());
+        if (!optionalTournament.isPresent())
+            throw new TournamentNotFoundException("id: " + dto.getTournamentId());
+        Tournament tournament = optionalTournament.get();
+
+        TournamentSettings tournamentSettings = repository.findByTournamentUid(tournament.getUid());
+        if (tournamentSettings == null) {
+            tournamentSettings = new TournamentSettings();
         }
+        tournamentSettings.setTournament(tournament);
         tournamentSettings.setValuesFromDTO(dto);
 
         return repository.save(tournamentSettings).toDTO();

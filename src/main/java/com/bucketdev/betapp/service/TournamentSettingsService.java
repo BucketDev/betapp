@@ -7,6 +7,7 @@ import com.bucketdev.betapp.dto.TournamentSettingsDTO;
  */
 public interface TournamentSettingsService {
 
+    TournamentSettingsDTO findByTournamentUid(String uid);
     TournamentSettingsDTO upsert(TournamentSettingsDTO dto);
 
 }
