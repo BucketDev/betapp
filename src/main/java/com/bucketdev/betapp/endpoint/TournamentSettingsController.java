@@ -17,7 +17,7 @@ public class TournamentSettingsController {
     @Autowired
     private TournamentSettingsService service;
 
-    @GetMapping("/tournamentUid/{uid}")
+    @GetMapping("/tournament/{uid}")
     public ResponseEntity<TournamentSettingsDTO> findByTournamentUid(@PathVariable String uid) {
         return new ResponseEntity<>(service.findByTournamentUid(uid), HttpStatus.OK);
     }
