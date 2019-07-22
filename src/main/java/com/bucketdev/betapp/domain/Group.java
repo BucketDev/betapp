@@ -23,6 +23,9 @@ public class Group {
         name = _name;
     }
 
+    public Group() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
