@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author rodrigo.loyola
@@ -23,7 +23,7 @@ public class GroupController {
     private GroupService service;
 
     @GetMapping("/tournament/{uid}")
-    public ResponseEntity<Set<GroupDTO>> findByTournamentUid(@PathVariable String uid) {
+    public ResponseEntity<List<GroupDTO>> findByTournamentUid(@PathVariable String uid) {
         return new ResponseEntity<>(service.findByTournamentUid(uid), HttpStatus.OK);
     }
 

@@ -8,8 +8,8 @@ import com.bucketdev.betapp.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -33,8 +33,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Set<GroupDTO> findByTournamentUid(String uid) {
-        return repository.findAllByTournamentUid(uid).stream().map(Group::toDTO).collect(Collectors.toSet());
+    public List<GroupDTO> findByTournamentUid(String uid) {
+        return repository.findAllByTournamentUidOrderByName(uid).stream().map(Group::toDTO).collect(Collectors.toList());
     }
 
 }
