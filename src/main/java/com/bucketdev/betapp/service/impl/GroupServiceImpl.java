@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author rodrigo.loyola
@@ -28,6 +30,11 @@ public class GroupServiceImpl implements GroupService {
             group = groupOptional.get();
         }
         return repository.save(group).toDTO();
+    }
+
+    @Override
+    public Set<GroupDTO> findByTournamentUid(String uid) {
+        return repository.findAllByTournamentUid(uid).stream().map(Group::toDTO).collect(Collectors.toSet());
     }
 
 }

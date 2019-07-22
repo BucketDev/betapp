@@ -53,9 +53,6 @@ public class TournamentDetails {
     )
     private Set<User> participants;
 
-    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Group> groups;
-
     @OneToOne(mappedBy = "tournament", cascade = CascadeType.ALL, optional = false)
     private PoolSettings poolSettings;
 
@@ -73,7 +70,6 @@ public class TournamentDetails {
         dto.setCreationDate(creationDate);
         dto.setUserCreationId(userCreation.getId());
         dto.setParticipants(participants.stream().map(User::toDTO).collect(Collectors.toSet()));
-        dto.setGroups(groups.stream().map(Group::toDTO).collect(Collectors.toSet()));
         if(poolSettings != null)
             dto.setPoolSettings(poolSettings.toDTO());
         if(tournamentSettings != null)

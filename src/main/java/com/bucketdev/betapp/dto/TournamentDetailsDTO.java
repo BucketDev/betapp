@@ -24,7 +24,6 @@ public class TournamentDetailsDTO implements Serializable {
     private Calendar creationDate;
     private long userCreationId;
     private Set<UserDTO> participants;
-    private Set<GroupDTO> groups;
     private PoolSettingsDTO poolSettings;
     private TournamentSettingsDTO tournamentSettings;
 
