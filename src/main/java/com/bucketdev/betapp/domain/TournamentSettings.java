@@ -54,7 +54,6 @@ public class TournamentSettings {
     @Enumerated(EnumType.STRING)
     private PlayoffStage playoffStage;
 
-
     @OneToMany(mappedBy = "tournamentSettings", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PlayoffSettings> playoffSettings;
 

@@ -27,7 +27,7 @@ public class TournamentServiceImpl implements TournamentService {
     private UserRepository userRepository;
 
     @Autowired
-    private ParticipantsRepository participantsRepository;
+    private ParticipantRepository participantRepository;
 
     @Autowired
     private TournamentSettingsRepository tournamentSettingsRepository;
@@ -57,10 +57,10 @@ public class TournamentServiceImpl implements TournamentService {
 
         if (dto.getId() == 0) {
             //add the creation user to the tournament by default
-            Participants participants = new Participants();
-            participants.setTournament(tournament);
-            participants.setUser(tournament.getUserCreation());
-            participantsRepository.save(participants);
+            Participant participant = new Participant();
+            participant.setTournament(tournament);
+            participant.setUser(tournament.getUserCreation());
+            participantRepository.save(participant);
 
             //create the default tournament settings
             TournamentSettings tournamentSettings = new TournamentSettings();
@@ -90,10 +90,10 @@ public class TournamentServiceImpl implements TournamentService {
             throw new TournamentNotFoundException("id: " + id);
         Tournament tournament = optionalTournament.get();
 
-        Participants participants = new Participants();
-        participants.setUser(user);
-        participants.setTournament(tournament);
-        participantsRepository.save(participants);
+        Participant participant = new Participant();
+        participant.setUser(user);
+        participant.setTournament(tournament);
+        participantRepository.save(participant);
 
         return user.toDTO();
     }
