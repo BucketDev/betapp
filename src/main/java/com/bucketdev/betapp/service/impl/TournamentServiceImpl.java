@@ -8,7 +8,7 @@ import com.bucketdev.betapp.exception.user.UserNotFoundException;
 import com.bucketdev.betapp.repository.*;
 import com.bucketdev.betapp.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Optional;
@@ -17,7 +17,7 @@ import java.util.UUID;
 /**
  * @author rodrigo.loyola
  */
-@Component
+@Service
 public class TournamentServiceImpl implements TournamentService {
 
     @Autowired

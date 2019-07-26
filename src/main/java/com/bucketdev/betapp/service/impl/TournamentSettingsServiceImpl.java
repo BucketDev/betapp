@@ -10,7 +10,7 @@ import com.bucketdev.betapp.repository.TournamentRepository;
 import com.bucketdev.betapp.repository.TournamentSettingsRepository;
 import com.bucketdev.betapp.service.TournamentSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -18,7 +18,7 @@ import java.util.Optional;
 /**
  * @author rodrigo.loyola
  */
-@Component
+@Service
 public class TournamentSettingsServiceImpl implements TournamentSettingsService {
 
     @Autowired
