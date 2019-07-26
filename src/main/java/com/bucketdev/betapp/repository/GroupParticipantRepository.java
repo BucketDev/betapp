@@ -1,6 +1,6 @@
 package com.bucketdev.betapp.repository;
 
-import com.bucketdev.betapp.domain.Participants;
+import com.bucketdev.betapp.domain.GroupParticipant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
  * @author rodrigo.loyola
  */
 @Repository
-public interface ParticipantsRepository extends JpaRepository<Participants, Long> {
+public interface GroupParticipantRepository extends JpaRepository<GroupParticipant, Long> {
+
 }

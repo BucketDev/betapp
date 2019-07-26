@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @author
+ * @author rodrigo.loyola
  */
 @Entity
 @Table(name = "tournaments")

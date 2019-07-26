@@ -1,6 +1,5 @@
 package com.bucketdev.betapp.dto;
 
-import com.bucketdev.betapp.domain.TournamentSettings;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
