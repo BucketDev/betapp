@@ -6,10 +6,9 @@ import com.bucketdev.betapp.service.GroupParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author rodrigo.loyola
@@ -21,9 +20,14 @@ public class GroupParticipantController {
     @Autowired
     private GroupParticipantService service;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<UserDTO> saveGroupParticipant(@RequestBody GroupParticipantDTO groupParticipant) {
         return new ResponseEntity<>(service.save(groupParticipant), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/tournament/{$id}")
+    public ResponseEntity<List<GroupParticipantDTO>> findByTournamentId(@RequestParam long tournamentId) {
+        return new ResponseEntity<>(service.findByTournamentId(tournamentId), HttpStatus.OK);
     }
 
 }

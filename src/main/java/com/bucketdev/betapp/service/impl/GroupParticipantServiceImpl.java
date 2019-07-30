@@ -17,7 +17,9 @@ import com.bucketdev.betapp.service.GroupParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author rodrigo.loyola
@@ -58,6 +60,12 @@ public class GroupParticipantServiceImpl implements GroupParticipantService {
         groupParticipant.setUser(user);
 
         return repository.save(groupParticipant).getUser().toDTO();
+    }
+
+    @Override
+    public List<GroupParticipantDTO> findByTournamentId(long tournamentId) {
+        return repository.findByTournamentId(tournamentId).stream()
+                .map(GroupParticipant::toDTO).collect(Collectors.toList());
     }
 
 }

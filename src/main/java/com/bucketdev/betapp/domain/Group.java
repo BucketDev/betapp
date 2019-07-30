@@ -6,8 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 /**
@@ -38,12 +36,12 @@ public class Group {
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
-    @ManyToMany
+    /*@ManyToMany
     @JoinTable(name = "group_participants",
             joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> groupParticipants;
+    private Set<User> groupParticipants;*/
 
     public GroupDTO toDTO() {
         GroupDTO dto = new GroupDTO();
@@ -51,7 +49,7 @@ public class Group {
         dto.setId(id);
         dto.setName(name);
         dto.setTournamentId(tournament.getId());
-        dto.setGroupParticipants(groupParticipants.stream().map(User::toDTO).collect(Collectors.toSet()));
+        //dto.setGroupParticipants(groupParticipants.stream().map(User::toDTO).collect(Collectors.toSet()));
 
         return dto;
     }

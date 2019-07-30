@@ -15,5 +15,9 @@ public class GroupParticipantDTO implements Serializable {
     private long id;
     private GroupDTO group;
     private UserDTO user;
+    private int gamesPlayed;
+    private int gamesWon;
+    private int gamesTied;
+    private int gamesLost;
 
 }
