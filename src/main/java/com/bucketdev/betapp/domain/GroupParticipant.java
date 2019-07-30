@@ -49,6 +49,10 @@ public class GroupParticipant {
     @Min(value = 0)
     private Integer gamesLost;
 
+    @Column
+    @Min(value = 0)
+    private Integer points;
+
     public GroupParticipantDTO toDTO() {
         GroupParticipantDTO dto = new GroupParticipantDTO();
 
@@ -57,6 +61,7 @@ public class GroupParticipant {
         dto.setGamesWon(gamesWon);
         dto.setGamesTied(gamesTied);
         dto.setGamesLost(gamesLost);
+        dto.setPoints(points);
 
         if (user != null)
             dto.setUser(user.toDTO());

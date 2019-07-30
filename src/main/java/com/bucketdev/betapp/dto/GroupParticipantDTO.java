@@ -21,5 +21,6 @@ public class GroupParticipantDTO implements Serializable {
     private int gamesWon;
     private int gamesTied;
     private int gamesLost;
+    private int points;
 
 }
