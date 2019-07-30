@@ -25,8 +25,8 @@ public class GroupParticipantController {
         return new ResponseEntity<>(service.save(groupParticipant), HttpStatus.CREATED);
     }
 
-    @GetMapping("/tournament/{$id}")
-    public ResponseEntity<List<GroupParticipantDTO>> findByTournamentId(@RequestParam long tournamentId) {
+    @GetMapping("/tournament/{tournamentId}")
+    public ResponseEntity<List<GroupParticipantDTO>> findByTournamentId(@PathVariable long tournamentId) {
         return new ResponseEntity<>(service.findByTournamentId(tournamentId), HttpStatus.OK);
     }
 
