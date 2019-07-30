@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author rodrigo.loyola
@@ -15,6 +16,6 @@ public class GroupDTO implements Serializable {
     private long id;
     private char name;
     private long tournamentId;
-    //private Set<UserDTO> groupParticipants;
+    private List<GroupParticipantDTO> groupParticipants;
 
 }

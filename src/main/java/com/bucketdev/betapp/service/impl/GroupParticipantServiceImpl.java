@@ -41,17 +41,17 @@ public class GroupParticipantServiceImpl implements GroupParticipantService {
 
     @Override
     public UserDTO save(GroupParticipantDTO groupParticipantDTO) {
-        Optional<Group> groupOptional = groupRepository.findById(groupParticipantDTO.getGroup().getId());
+        Optional<Group> groupOptional = groupRepository.findById(groupParticipantDTO.getGroupId());
         if (!groupOptional.isPresent())
-            throw new GroupNotFoundException("id: " + groupParticipantDTO.getGroup().getId());
+            throw new GroupNotFoundException("id: " + groupParticipantDTO.getGroupId());
         Group group = groupOptional.get();
         Optional<User> userOptional = userRepository.findById(groupParticipantDTO.getUser().getId());
         if (!userOptional.isPresent())
             throw new UserNotFoundException("id: " + groupParticipantDTO.getUser().getId());
         User user = userOptional.get();
-        Optional<Tournament> tournamentOptional = tournamentRepository.findById(groupParticipantDTO.getGroup().getTournamentId());
+        Optional<Tournament> tournamentOptional = tournamentRepository.findById(groupParticipantDTO.getTournamentId());
         if (!tournamentOptional.isPresent())
-            throw new TournamentNotFoundException("id: " + groupParticipantDTO.getGroup().getTournamentId());
+            throw new TournamentNotFoundException("id: " + groupParticipantDTO.getTournamentId());
         Tournament tournament = tournamentOptional.get();
 
         GroupParticipant groupParticipant = new GroupParticipant();

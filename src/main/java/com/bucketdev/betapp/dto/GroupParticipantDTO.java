@@ -13,7 +13,9 @@ import java.io.Serializable;
 public class GroupParticipantDTO implements Serializable {
 
     private long id;
-    private GroupDTO group;
+    private long groupId;
+    private char groupName;
+    private long tournamentId;
     private UserDTO user;
     private int gamesPlayed;
     private int gamesWon;

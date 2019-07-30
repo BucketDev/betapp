@@ -21,8 +21,8 @@ public class GroupParticipant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
-    @ManyToOne
+    @OneToOne
+    @JoinColumn(name = "group_id")
     private Group group;
 
     @NotNull
@@ -52,16 +52,20 @@ public class GroupParticipant {
     public GroupParticipantDTO toDTO() {
         GroupParticipantDTO dto = new GroupParticipantDTO();
 
+        dto.setId(id);
         dto.setGamesPlayed(gamesPlayed);
         dto.setGamesWon(gamesWon);
         dto.setGamesTied(gamesTied);
         dto.setGamesLost(gamesLost);
 
-        dto.setId(id);
-        if (group != null)
-            dto.setGroup(group.toDTO());
         if (user != null)
             dto.setUser(user.toDTO());
+        if (group != null) {
+            dto.setGroupId(group.getId());
+            dto.setGroupName(group.getName());
+        }
+        if (tournament != null)
+            dto.setTournamentId(tournament.getId());
 
         return dto;
     }
