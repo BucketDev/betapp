@@ -58,6 +58,7 @@ public class GroupParticipantServiceImpl implements GroupParticipantService {
         groupParticipant.setGroup(group);
         groupParticipant.setTournament(tournament);
         groupParticipant.setUser(user);
+        groupParticipant.setValuesFromDTO(groupParticipantDTO);
 
         return repository.save(groupParticipant).getUser().toDTO();
     }

@@ -75,4 +75,12 @@ public class GroupParticipant {
         return dto;
     }
 
+    public void setValuesFromDTO(GroupParticipantDTO dto) {
+        gamesPlayed = dto.getGamesPlayed();
+        gamesWon = dto.getGamesWon();
+        gamesTied = dto.getGamesTied();
+        gamesLost = dto.getGamesLost();
+        points = dto.getPoints();
+    }
+
 }
