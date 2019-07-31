@@ -1,7 +1,6 @@
 package com.bucketdev.betapp.service;
 
 import com.bucketdev.betapp.dto.GroupParticipantDTO;
-import com.bucketdev.betapp.dto.UserDTO;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
  */
 public interface GroupParticipantService {
 
-    UserDTO save(GroupParticipantDTO groupParticipantDTO);
+    GroupParticipantDTO save(GroupParticipantDTO groupParticipantDTO);
 
     List<GroupParticipantDTO> findByTournamentId(long tournamentId);
 

@@ -5,7 +5,6 @@ import com.bucketdev.betapp.domain.GroupParticipant;
 import com.bucketdev.betapp.domain.Tournament;
 import com.bucketdev.betapp.domain.User;
 import com.bucketdev.betapp.dto.GroupParticipantDTO;
-import com.bucketdev.betapp.dto.UserDTO;
 import com.bucketdev.betapp.exception.group.GroupNotFoundException;
 import com.bucketdev.betapp.exception.tournament.TournamentNotFoundException;
 import com.bucketdev.betapp.exception.user.UserNotFoundException;
@@ -40,7 +39,7 @@ public class GroupParticipantServiceImpl implements GroupParticipantService {
     private TournamentRepository tournamentRepository;
 
     @Override
-    public UserDTO save(GroupParticipantDTO groupParticipantDTO) {
+    public GroupParticipantDTO save(GroupParticipantDTO groupParticipantDTO) {
         Optional<Group> groupOptional = groupRepository.findById(groupParticipantDTO.getGroupId());
         if (!groupOptional.isPresent())
             throw new GroupNotFoundException("id: " + groupParticipantDTO.getGroupId());
@@ -60,7 +59,7 @@ public class GroupParticipantServiceImpl implements GroupParticipantService {
         groupParticipant.setUser(user);
         groupParticipant.setValuesFromDTO(groupParticipantDTO);
 
-        return repository.save(groupParticipant).getUser().toDTO();
+        return repository.save(groupParticipant).toDTO();
     }
 
     @Override
