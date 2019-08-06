@@ -34,6 +34,10 @@ public class User {
     @Column
     private String photoUrl;
 
+    @Column
+    @NotNull
+    private String provider;
+
     public UserDTO toDTO() {
         UserDTO dto = new UserDTO();
 
@@ -42,6 +46,7 @@ public class User {
         dto.setEmail(email);
         dto.setDisplayName(displayName);
         dto.setPhotoUrl(photoUrl);
+        dto.setProvider(provider);
 
         return dto;
     }
@@ -51,6 +56,7 @@ public class User {
         email = dto.getEmail();
         displayName = dto.getDisplayName();
         photoUrl = dto.getPhotoUrl();
+        provider = dto.getProvider();
     }
 
 }
