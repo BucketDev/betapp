@@ -28,7 +28,7 @@ public class TournamentController {
         return new ResponseEntity<>(service.addParticipant(id, userDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}/photo}")
+    @PutMapping("/{id}/photo")
     public ResponseEntity<TournamentDTO> updatePhotoUrl(@PathVariable long id, @RequestBody TournamentDTO dto) {
         return new ResponseEntity<>(service.updatePhotoUrl(id, dto), HttpStatus.OK);
     }
