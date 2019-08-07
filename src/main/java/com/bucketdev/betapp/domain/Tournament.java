@@ -2,6 +2,7 @@ package com.bucketdev.betapp.domain;
 
 import com.bucketdev.betapp.dto.TournamentDTO;
 import com.bucketdev.betapp.type.TournamentPrivacy;
+import com.bucketdev.betapp.type.TournamentStage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,6 +54,10 @@ public class Tournament {
     @ManyToOne
     private User userCreation;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private TournamentStage tournamentStage;
+
     public TournamentDTO toDTO() {
         TournamentDTO dto = new TournamentDTO();
 
@@ -65,6 +70,7 @@ public class Tournament {
         dto.setTournamentGroups(tournamentGroups);
         dto.setTournamentTeams(tournamentTeams);
         dto.setUserCreationId(userCreation.getId());
+        dto.setTournamentStage(tournamentStage);
 
         return dto;
     }

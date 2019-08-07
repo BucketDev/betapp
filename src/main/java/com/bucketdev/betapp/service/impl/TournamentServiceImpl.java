@@ -7,6 +7,7 @@ import com.bucketdev.betapp.exception.tournament.TournamentNotFoundException;
 import com.bucketdev.betapp.exception.user.UserNotFoundException;
 import com.bucketdev.betapp.repository.*;
 import com.bucketdev.betapp.service.TournamentService;
+import com.bucketdev.betapp.type.TournamentStage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +51,7 @@ public class TournamentServiceImpl implements TournamentService {
             tournament.setUid(UUID.randomUUID().toString());
             tournament.setCreationDate(Calendar.getInstance());
             tournament.setUserCreation(optionalUser.get());
+            tournament.setTournamentStage(TournamentStage.NEW_TOURNAMENT);
         }
         tournament.setValuesFromDTO(dto);
         tournament = repository.save(tournament);
