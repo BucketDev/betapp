@@ -98,4 +98,13 @@ public class TournamentServiceImpl implements TournamentService {
         return user.toDTO();
     }
 
+    @Override
+    public TournamentDTO updatePhotoUrl(long id, String photoUrl) {
+        Optional<Tournament> optionalTournament = repository.findById(id);
+        if (!optionalTournament.isPresent())
+            throw new TournamentNotFoundException("id: " + id);
+        Tournament tournament = optionalTournament.get();
+        tournament.setPhotoUrl(photoUrl);
+        return repository.save(tournament).toDTO();
+    }
 }
