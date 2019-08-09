@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface GroupParticipantRepository extends JpaRepository<GroupParticipant, Long> {
 
-    List<GroupParticipant> findByTournamentId(long tournamentId);
+    List<GroupParticipant> findAllByTournamentId(long tournamentId);
 
 }

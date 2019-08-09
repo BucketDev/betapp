@@ -33,4 +33,9 @@ public class TournamentController {
         return new ResponseEntity<>(service.updatePhotoUrl(id, dto), HttpStatus.OK);
     }
 
+    @PutMapping("/stage")
+    public ResponseEntity<TournamentDTO> updateTournamentStage(@RequestBody TournamentDTO dto) {
+        return new ResponseEntity<>(service.updateTournamentStage(dto), HttpStatus.OK);
+    }
+
 }

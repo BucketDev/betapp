@@ -64,7 +64,7 @@ public class GroupParticipantServiceImpl implements GroupParticipantService {
 
     @Override
     public List<GroupParticipantDTO> findByTournamentId(long tournamentId) {
-        return repository.findByTournamentId(tournamentId).stream()
+        return repository.findAllByTournamentId(tournamentId).stream()
                 .map(GroupParticipant::toDTO).collect(Collectors.toList());
     }
 

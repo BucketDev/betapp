@@ -8,5 +8,6 @@ public interface TournamentService {
     TournamentDTO save(TournamentDTO dto);
     UserDTO addParticipant(long id, UserDTO userDTO);
     TournamentDTO updatePhotoUrl(long id, TournamentDTO dto);
+    TournamentDTO updateTournamentStage(TournamentDTO dto);
 
 }
