@@ -177,7 +177,9 @@ public class TournamentServiceImpl implements TournamentService {
             if (groupParticipants.size() < 2)
                 throw new GroupParticipantsNotSufficient("groupId: " + group.getId());
             int arrayLikeSize = groupParticipants.size() - 1;
+            // pivot to hold the first team and make combinations with it
             for (int i = 0; i < arrayLikeSize; i++) {
+                // pivot to hold the next team and make combinations with it
                 for (int j = i + 1; j <= arrayLikeSize; j++) {
                     MatchParticipants matchParticipants = new MatchParticipants();
                     matchParticipants.setTournament(tournament);

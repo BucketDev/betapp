@@ -1,7 +1,7 @@
 package com.bucketdev.betapp.endpoint;
 
-import com.bucketdev.betapp.dto.ParticipantDTO;
-import com.bucketdev.betapp.service.ParticipantService;
+import com.bucketdev.betapp.dto.MatchParticipantsDTO;
+import com.bucketdev.betapp.service.MatchParticipantsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +16,15 @@ import java.util.List;
  * @author rodrigo.loyola
  */
 @RestController
-@RequestMapping("/participants")
-public class ParticipantController {
+@RequestMapping("/matchParticipants")
+public class MatchParticipantsController {
 
     @Autowired
-    private ParticipantService service;
+    private MatchParticipantsService service;
 
-    @GetMapping("/pendingGroupByTournament/{tournamentId}")
-    public ResponseEntity<List<ParticipantDTO>> pendingGroupByTournament(@PathVariable long tournamentId) {
-        return new ResponseEntity<>(service.pendingGroupByTournament(tournamentId), HttpStatus.OK);
+    @GetMapping("tournamentId/{tournamentId}")
+    public ResponseEntity<List<MatchParticipantsDTO>> findAllByTournamentId(@PathVariable long tournamentId) {
+        return new ResponseEntity<>(service.findAllByTournamentId(tournamentId), HttpStatus.OK);
     }
 
 }
