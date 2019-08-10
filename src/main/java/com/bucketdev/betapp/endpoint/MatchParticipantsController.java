@@ -22,7 +22,7 @@ public class MatchParticipantsController {
     @Autowired
     private MatchParticipantsService service;
 
-    @GetMapping("tournamentId/{tournamentId}")
+    @GetMapping("tournament/{tournamentId}")
     public ResponseEntity<List<MatchParticipantsDTO>> findAllByTournamentId(@PathVariable long tournamentId) {
         return new ResponseEntity<>(service.findAllByTournamentId(tournamentId), HttpStatus.OK);
     }
