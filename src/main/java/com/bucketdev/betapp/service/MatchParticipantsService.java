@@ -1,6 +1,5 @@
 package com.bucketdev.betapp.service;
 
-import com.bucketdev.betapp.domain.MatchParticipants;
 import com.bucketdev.betapp.dto.MatchParticipantsDTO;
 
 import java.util.List;
@@ -12,4 +11,5 @@ public interface MatchParticipantsService {
 
     List<MatchParticipantsDTO> findAllByTournamentId(long tournamentId);
 
+    MatchParticipantsDTO update(MatchParticipantsDTO dto);
 }
