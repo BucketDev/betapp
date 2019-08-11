@@ -42,6 +42,7 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
 
         matchParticipants.setScoreAway(dto.getScoreAway());
         matchParticipants.setScoreHome(dto.getScoreHome());
+        matchParticipants.setScheduledTime(dto.getScheduledTime());
         matchParticipants.setRegisteredTime(Calendar.getInstance());
 
         calculatePoints(matchParticipants);
