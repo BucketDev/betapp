@@ -17,9 +17,9 @@ public class MatchParticipantsDTO implements Serializable {
     private long id;
     private long tournamentId;
     private GroupParticipantDTO groupParticipantAway;
-    private int scoreAway;
+    private Integer scoreAway;
     private GroupParticipantDTO groupParticipantHome;
-    private int scoreHome;
+    private Integer scoreHome;
     @JsonFormat(timezone = "GMT-06:00")
     private Calendar scheduledTime;
     @JsonFormat(timezone = "GMT-06:00")

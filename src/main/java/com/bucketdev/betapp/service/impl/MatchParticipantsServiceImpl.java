@@ -40,12 +40,16 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
             throw new MatchParticipantsNotFoundException("id: " + dto.getId());
         MatchParticipants matchParticipants = optionalMatchParticipants.get();
 
-        matchParticipants.setScoreAway(dto.getScoreAway());
-        matchParticipants.setScoreHome(dto.getScoreHome());
-        matchParticipants.setScheduledTime(dto.getScheduledTime());
-        matchParticipants.setRegisteredTime(Calendar.getInstance());
+        if (dto.getScoreAway() != null && dto.getScoreHome() != null) {
+            matchParticipants.setScoreAway(dto.getScoreAway());
+            matchParticipants.setScoreHome(dto.getScoreHome());
+            matchParticipants.setRegisteredTime(Calendar.getInstance());
 
-        calculatePoints(matchParticipants);
+            calculatePoints(matchParticipants);
+        } else {
+            matchParticipants.setScheduledTime(dto.getScheduledTime());
+        }
+
 
         return repository.save(matchParticipants).toDTO();
     }
