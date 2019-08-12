@@ -40,6 +40,7 @@ public class Group {
 
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("points DESC, gamesWon DESC")
     private List<GroupParticipant> groupParticipants;
 
     public GroupDTO toDTO() {
