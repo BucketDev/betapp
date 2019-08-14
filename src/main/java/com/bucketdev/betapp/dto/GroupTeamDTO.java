@@ -10,13 +10,12 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-public class GroupParticipantDTO implements Serializable {
+public class GroupTeamDTO implements Serializable {
 
     private long id;
     private long groupId;
-    private char groupName;
     private long tournamentId;
-    private UserDTO user;
+    private TeamDTO team;
     private int gamesPlayed;
     private int gamesWon;
     private int gamesTied;

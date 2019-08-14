@@ -8,14 +8,14 @@ import com.bucketdev.betapp.repository.PoolSettingsRepository;
 import com.bucketdev.betapp.repository.TournamentRepository;
 import com.bucketdev.betapp.service.PoolSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 /**
  * @author rodrigo.loyola
  */
-@Component
+@Service
 public class PoolSettingsServiceImpl implements PoolSettingsService {
 
     @Autowired

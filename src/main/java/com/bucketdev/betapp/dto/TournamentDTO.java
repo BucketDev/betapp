@@ -1,6 +1,7 @@
 package com.bucketdev.betapp.dto;
 
 import com.bucketdev.betapp.type.TournamentPrivacy;
+import com.bucketdev.betapp.type.TournamentStage;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,5 +26,6 @@ public class TournamentDTO implements Serializable {
     @JsonFormat(timezone = "GMT-06:00")
     private Calendar creationDate;
     private long userCreationId;
+    private TournamentStage tournamentStage;
 
 }

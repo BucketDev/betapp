@@ -6,7 +6,7 @@ import com.bucketdev.betapp.exception.user.UserNotFoundException;
 import com.bucketdev.betapp.repository.UserRepository;
 import com.bucketdev.betapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * @author rodrigo.loyola
  */
-@Component
+@Service
 public class UserServiceImpl implements UserService {
 
     @Autowired

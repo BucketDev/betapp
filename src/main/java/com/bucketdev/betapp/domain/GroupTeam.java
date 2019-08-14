@@ -1,6 +1,6 @@
 package com.bucketdev.betapp.domain;
 
-import com.bucketdev.betapp.dto.GroupParticipantDTO;
+import com.bucketdev.betapp.dto.GroupTeamDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,10 +12,10 @@ import javax.validation.constraints.NotNull;
  * @author rodrigo.loyola
  */
 @Entity
-@Table(name = "group_participants")
+@Table(name = "group_teams")
 @Getter
 @Setter
-public class GroupParticipant {
+public class GroupTeam {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,8 @@ public class GroupParticipant {
 
     @NotNull
     @ManyToOne
-    private User user;
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @Column
     @Min(value = 0)
@@ -53,34 +54,23 @@ public class GroupParticipant {
     @Min(value = 0)
     private Integer points;
 
-    public GroupParticipantDTO toDTO() {
-        GroupParticipantDTO dto = new GroupParticipantDTO();
+    public GroupTeamDTO toDTO() {
+        GroupTeamDTO dto = new GroupTeamDTO();
 
         dto.setId(id);
+        if (group != null)
+            dto.setGroupId(group.getId());
+        if (tournament != null)
+            dto.setTournamentId(tournament.getId());
+        if (team != null)
+            dto.setTeam(team.toDTO());
         dto.setGamesPlayed(gamesPlayed);
         dto.setGamesWon(gamesWon);
         dto.setGamesTied(gamesTied);
         dto.setGamesLost(gamesLost);
         dto.setPoints(points);
 
-        if (user != null)
-            dto.setUser(user.toDTO());
-        if (group != null) {
-            dto.setGroupId(group.getId());
-            dto.setGroupName(group.getName());
-        }
-        if (tournament != null)
-            dto.setTournamentId(tournament.getId());
-
         return dto;
-    }
-
-    public void setValuesFromDTO(GroupParticipantDTO dto) {
-        gamesPlayed = dto.getGamesPlayed();
-        gamesWon = dto.getGamesWon();
-        gamesTied = dto.getGamesTied();
-        gamesLost = dto.getGamesLost();
-        points = dto.getPoints();
     }
 
 }

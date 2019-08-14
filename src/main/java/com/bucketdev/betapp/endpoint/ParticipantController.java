@@ -22,7 +22,7 @@ public class ParticipantController {
     @Autowired
     private ParticipantService service;
 
-    @GetMapping(value = "/pendingGroupByTournament/{tournamentId}")
+    @GetMapping("/pendingGroupByTournament/{tournamentId}")
     public ResponseEntity<List<ParticipantDTO>> pendingGroupByTournament(@PathVariable long tournamentId) {
         return new ResponseEntity<>(service.pendingGroupByTournament(tournamentId), HttpStatus.OK);
     }

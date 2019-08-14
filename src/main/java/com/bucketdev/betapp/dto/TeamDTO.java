@@ -4,18 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author rodrigo.loyola
  */
 @Getter
 @Setter
-public class GroupDTO implements Serializable {
+public class TeamDTO implements Serializable {
 
     private long id;
-    private char name;
-    private long tournamentId;
-    private List<GroupParticipantDTO> groupParticipants;
+    private String uid;
+    private String photoUrl;
+    private String name;
 
 }

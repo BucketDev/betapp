@@ -4,12 +4,12 @@ import com.bucketdev.betapp.dto.TournamentDetailsDTO;
 import com.bucketdev.betapp.repository.TournamentDetailsRepository;
 import com.bucketdev.betapp.service.TournamentDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * @author rodrigo.loyola
  */
-@Component
+@Service
 public class TournamentDetailsServiceImpl implements TournamentDetailsService {
 
     @Autowired

@@ -5,7 +5,7 @@ import com.bucketdev.betapp.dto.ParticipantDTO;
 import com.bucketdev.betapp.repository.ParticipantRepository;
 import com.bucketdev.betapp.service.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * @author rodrigo.loyola
  */
-@Component
+@Service
 public class ParticipantServiceImpl implements ParticipantService {
 
     @Autowired

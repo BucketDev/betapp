@@ -1,6 +1,6 @@
 package com.bucketdev.betapp.repository;
 
-import com.bucketdev.betapp.domain.GroupParticipant;
+import com.bucketdev.betapp.domain.MatchParticipants;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +10,8 @@ import java.util.List;
  * @author rodrigo.loyola
  */
 @Repository
-public interface GroupParticipantRepository extends JpaRepository<GroupParticipant, Long> {
+public interface MatchParticipantsRepository extends JpaRepository<MatchParticipants, Long> {
 
-    List<GroupParticipant> findAllByTournamentId(long tournamentId);
+    List<MatchParticipants> findAllByTournamentId(long tournamentId);
 
 }
