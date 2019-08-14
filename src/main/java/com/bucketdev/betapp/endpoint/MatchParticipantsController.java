@@ -24,6 +24,11 @@ public class MatchParticipantsController {
         return new ResponseEntity<>(service.findAllByTournamentId(tournamentId), HttpStatus.OK);
     }
 
+    @GetMapping("tournament/{tournamentId}/playoffs")
+    public ResponseEntity<List<MatchParticipantsDTO>> findAllPlayoffsByTournamentId(@PathVariable long tournamentId) {
+        return new ResponseEntity<>(service.findAllPlayoffsByTournamentId(tournamentId), HttpStatus.OK);
+    }
+
     @PutMapping
     public ResponseEntity<MatchParticipantsDTO> update(@RequestBody MatchParticipantsDTO dto) {
         return new ResponseEntity<>(service.update(dto), HttpStatus.OK);

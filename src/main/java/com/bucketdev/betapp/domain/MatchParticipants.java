@@ -1,6 +1,7 @@
 package com.bucketdev.betapp.domain;
 
 import com.bucketdev.betapp.dto.MatchParticipantsDTO;
+import com.bucketdev.betapp.type.PlayoffStage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -48,6 +49,10 @@ public class MatchParticipants {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar registeredTime;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private PlayoffStage playoffStage;
 
     public MatchParticipantsDTO toDTO() {
         MatchParticipantsDTO dto = new MatchParticipantsDTO();

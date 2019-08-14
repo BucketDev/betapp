@@ -40,6 +40,18 @@ public class TournamentSettings {
     private boolean groupRoundTrip;
 
     @Column
+    private boolean eightFinalsRoundTrip;
+
+    @Column
+    private boolean quarterFinalsRoundTrip;
+
+    @Column
+    private boolean semiFinalsRoundTrip;
+
+    @Column
+    private boolean finalRoundTrip;
+
+    @Column
     @NotNull
     @Min(value = 1)
     @Max(value = 8)
@@ -54,27 +66,31 @@ public class TournamentSettings {
     @Enumerated(EnumType.STRING)
     private PlayoffStage playoffStage;
 
-    @OneToMany(mappedBy = "tournamentSettings", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<PlayoffSettings> playoffSettings;
-
     public TournamentSettingsDTO toDTO() {
         TournamentSettingsDTO dto = new TournamentSettingsDTO();
 
         dto.setId(id);
         dto.setTournamentId(tournament.getId());
         dto.setGroupRoundTrip(groupRoundTrip);
+        dto.setEightFinalsRoundTrip(eightFinalsRoundTrip);
+        dto.setQuarterFinalsRoundTrip(quarterFinalsRoundTrip);
+        dto.setSemiFinalsRoundTrip(semiFinalsRoundTrip);
+        dto.setFinalRoundTrip(finalRoundTrip);
         dto.setGroupNumber(groupNumber);
         dto.setFirst(first);
         dto.setPlayoffStage(playoffStage);
-        dto.setPlayoffSettings(playoffSettings.stream().map(PlayoffSettings::toDTO).collect(Collectors.toSet()));
 
         return dto;
     }
 
     public void setValuesFromDTO(TournamentSettingsDTO dto) {
-        groupRoundTrip = dto.isGroupRoundTrip();
         groupNumber = dto.getGroupNumber();
         first = dto.getFirst();
+        groupRoundTrip = dto.isGroupRoundTrip();
+        eightFinalsRoundTrip = dto.isEightFinalsRoundTrip();
+        quarterFinalsRoundTrip = dto.isQuarterFinalsRoundTrip();
+        semiFinalsRoundTrip = dto.isSemiFinalsRoundTrip();
+        finalRoundTrip = dto.isFinalRoundTrip();
         playoffStage = dto.getPlayoffStage();
     }
 

@@ -12,6 +12,8 @@ import java.util.List;
 @Repository
 public interface MatchParticipantsRepository extends JpaRepository<MatchParticipants, Long> {
 
-    List<MatchParticipants> findAllByTournamentId(long tournamentId);
+    List<MatchParticipants> findAllByTournamentIdAndPlayoffStageIsNull(long tournamentId);
+
+    List<MatchParticipants> findAllByTournamentIdAndPlayoffStageNotNull(long tournamentId);
 
 }

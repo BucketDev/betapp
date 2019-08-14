@@ -1,5 +1,6 @@
 package com.bucketdev.betapp.dto;
 
+import com.bucketdev.betapp.type.PlayoffStage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class GroupDTO implements Serializable {
     private long id;
     private char name;
     private long tournamentId;
+    private PlayoffStage playoffStage;
     private List<GroupParticipantDTO> groupParticipants;
 
 }

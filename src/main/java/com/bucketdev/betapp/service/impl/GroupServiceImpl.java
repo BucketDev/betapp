@@ -34,7 +34,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<GroupDTO> findByTournamentUid(String uid) {
-        return repository.findAllByTournamentUidOrderByName(uid).stream().map(Group::toDTO).collect(Collectors.toList());
+        return repository.findAllByTournamentUid(uid).stream().map(Group::toDTO).collect(Collectors.toList());
     }
 
 }

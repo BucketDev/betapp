@@ -11,5 +11,7 @@ public interface MatchParticipantsService {
 
     List<MatchParticipantsDTO> findAllByTournamentId(long tournamentId);
 
+    List<MatchParticipantsDTO> findAllPlayoffsByTournamentId(long tournamentId);
+
     MatchParticipantsDTO update(MatchParticipantsDTO dto);
 }

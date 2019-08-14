@@ -1,6 +1,7 @@
 package com.bucketdev.betapp.domain;
 
 import com.bucketdev.betapp.dto.GroupDTO;
+import com.bucketdev.betapp.type.PlayoffStage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,6 +39,9 @@ public class Group {
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private PlayoffStage playoffStage;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("points DESC, gamesWon DESC")
@@ -49,6 +53,7 @@ public class Group {
         dto.setId(id);
         dto.setName(name);
         dto.setTournamentId(tournament.getId());
+        dto.setPlayoffStage(playoffStage);
         dto.setGroupParticipants(groupParticipants.stream().map(GroupParticipant::toDTO).collect(Collectors.toList()));
 
         return dto;

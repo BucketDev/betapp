@@ -29,7 +29,13 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
 
     @Override
     public List<MatchParticipantsDTO> findAllByTournamentId(long tournamentId) {
-        return repository.findAllByTournamentId(tournamentId).stream()
+        return repository.findAllByTournamentIdAndPlayoffStageIsNull(tournamentId).stream()
+                .map(MatchParticipants::toDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MatchParticipantsDTO> findAllPlayoffsByTournamentId(long tournamentId) {
+        return repository.findAllByTournamentIdAndPlayoffStageNotNull(tournamentId).stream()
                 .map(MatchParticipants::toDTO).collect(Collectors.toList());
     }
 

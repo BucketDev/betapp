@@ -9,6 +9,7 @@ import com.bucketdev.betapp.repository.GroupRepository;
 import com.bucketdev.betapp.repository.TournamentRepository;
 import com.bucketdev.betapp.repository.TournamentSettingsRepository;
 import com.bucketdev.betapp.service.TournamentSettingsService;
+import com.bucketdev.betapp.type.PlayoffStage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,16 +52,53 @@ public class TournamentSettingsServiceImpl implements TournamentSettingsService 
         tournamentSettings.setTournament(tournament);
         tournamentSettings.setValuesFromDTO(dto);
 
+        groupRepository.deleteByTournamentUid(tournament.getUid());
+        int groupName = 65;
+
         if (tournament.isTournamentGroups()) {
-            groupRepository.deleteByTournamentUid(tournament.getUid());
-            int groupName = 65;
             for (int i = 0; i < tournamentSettings.getGroupNumber(); i++) {
                 Group group = new Group((char) groupName++);
                 group.setTournament(tournament);
                 groupRepository.save(group);
             }
         }
+        generateFinalsGroups(tournamentSettings);
 
         return repository.save(tournamentSettings).toDTO();
+    }
+
+    @Override
+    public void generateFinalsGroups(TournamentSettings tournamentSettings) {
+        Tournament tournament = tournamentSettings.getTournament();
+        switch (tournamentSettings.getPlayoffStage()) {
+            case EIGHTH_FINALS:
+                saveFinalsGroups(tournament, PlayoffStage.EIGHTH_FINALS, 8);
+                saveFinalsGroups(tournament, PlayoffStage.QUARTER_FINALS, 4);
+                saveFinalsGroups(tournament, PlayoffStage.SEMIFINALS, 2);
+                saveFinalsGroups(tournament, PlayoffStage.FINALS, 1);
+                break;
+            case QUARTER_FINALS:
+                saveFinalsGroups(tournament, PlayoffStage.QUARTER_FINALS, 4);
+                saveFinalsGroups(tournament, PlayoffStage.SEMIFINALS, 2);
+                saveFinalsGroups(tournament, PlayoffStage.FINALS, 1);
+                break;
+            case SEMIFINALS:
+                saveFinalsGroups(tournament, PlayoffStage.SEMIFINALS, 2);
+                saveFinalsGroups(tournament, PlayoffStage.FINALS, 1);
+                break;
+            case FINALS:
+                saveFinalsGroups(tournament, PlayoffStage.FINALS, 1);
+                break;
+        }
+    }
+
+    private void saveFinalsGroups(Tournament tournament, PlayoffStage playoffStage, int groupsNumber) {
+        int groupName = 65;
+        for (int i = 0; i < groupsNumber; i++) {
+            Group group = new Group((char) groupName++);
+            group.setTournament(tournament);
+            group.setPlayoffStage(playoffStage);
+            groupRepository.save(group);
+        }
     }
 }

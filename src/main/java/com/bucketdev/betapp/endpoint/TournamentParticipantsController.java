@@ -23,8 +23,9 @@ public class TournamentParticipantsController {
     private TournamentParticipantsService service;
 
     @GetMapping("/participant/{uid}")
-    public ResponseEntity<Page<TournamentParticipantsDTO>> findByParticipantUid(@PathVariable String uid,
-                                                                                @RequestParam(value = "page", defaultValue = "0") int page) {
+    public ResponseEntity<Page<TournamentParticipantsDTO>>
+        findByParticipantUid(@PathVariable String uid,
+                             @RequestParam(value = "page", defaultValue = "0") int page) {
         return new ResponseEntity<>(service.findByParticipantUid(PageRequest.of(page, 6), uid), HttpStatus.OK);
     }
 
