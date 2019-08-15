@@ -188,13 +188,10 @@ public class TournamentServiceImpl implements TournamentService {
         List<Group> finalists = groupRepository.findAllByTournamentUid(uid).stream().peek((group -> {
             if (group.getGroupParticipants().size() < tournamentSettings.getFirst())
                 throw new GroupParticipantsNotSufficient("groupId: " + group.getId());
-            group.getGroupParticipants().subList(0, tournamentSettings.getFirst() - 1);
         })).collect(Collectors.toList());
 
         int idxFirstGroup = 0;
         int idxLastGroup = finalists.size() - 1;
-        int idxFirstPlace = 0;
-        int idxLastPlace = tournamentSettings.getFirst() - 1;
         int idxFinalGroup = 0;
 
         List<Group> finalGroups = groupRepository.findAllFinalsByTournamentUid(uid, tournamentSettings.getPlayoffStage());
@@ -204,6 +201,8 @@ public class TournamentServiceImpl implements TournamentService {
         }
 
         do {
+            int idxFirstPlace = 0;
+            int idxLastPlace = tournamentSettings.getFirst() - 1;
             Group groupA = finalists.get(idxFirstGroup);
             Group groupB = finalists.get(idxLastGroup);
             while (idxFirstPlace < tournamentSettings.getFirst()) {
@@ -252,7 +251,7 @@ public class TournamentServiceImpl implements TournamentService {
             for (int i = 0; i < arrayLikeSize; i++) {
                 // pivot to hold the next team and make combinations with it
                 for (int j = i + 1; j <= arrayLikeSize; j++) {
-                    saveMatch(tournament, groupParticipants.get(j), groupParticipants.get(i), null);
+                    saveMatch(tournament, group, groupParticipants.get(j), groupParticipants.get(i), null);
                 }
             }
         }
@@ -263,23 +262,29 @@ public class TournamentServiceImpl implements TournamentService {
         if (groups == null || groups.size() == 0)
             throw new GroupsNotFoundException("tournamentUid: " + tournament.getUid());
         for (Group group : groups) {
-            List<GroupParticipant> groupParticipants = group.getGroupParticipants();
-            if (groupParticipants.size() < 2)
-                throw new GroupParticipantsNotSufficient("groupId: " + group.getId());
-            int arrayLikeSize = groupParticipants.size() - 1;
-            // pivot to hold the first team and make combinations with it
-            for (int i = 0; i < arrayLikeSize; i++) {
-                // pivot to hold the next team and make combinations with it
-                for (int j = i + 1; j <= arrayLikeSize; j++) {
-                    saveMatch(tournament, groupParticipants.get(j), groupParticipants.get(i), playoffStage);
-                }
+            oneTripFinalMatchesPerGroup(group, playoffStage);
+        }
+    }
+
+    @Override
+    public void oneTripFinalMatchesPerGroup(Group group, PlayoffStage playoffStage) {
+        List<GroupParticipant> groupParticipants = group.getGroupParticipants();
+        if (groupParticipants.size() < 2)
+            throw new GroupParticipantsNotSufficient("groupId: " + group.getId());
+        int arrayLikeSize = groupParticipants.size() - 1;
+        // pivot to hold the first team and make combinations with it
+        for (int i = 0; i < arrayLikeSize; i++) {
+            // pivot to hold the next team and make combinations with it
+            for (int j = i + 1; j <= arrayLikeSize; j++) {
+                saveMatch(group.getTournament(), group, groupParticipants.get(j), groupParticipants.get(i), playoffStage);
             }
         }
     }
 
-    private void saveMatch(Tournament tournament, GroupParticipant away, GroupParticipant home, PlayoffStage playoffStage) {
+    private void saveMatch(Tournament tournament, Group group, GroupParticipant away, GroupParticipant home, PlayoffStage playoffStage) {
         MatchParticipants matchParticipants = new MatchParticipants();
         matchParticipants.setTournament(tournament);
+        matchParticipants.setGroup(group);
         matchParticipants.setGroupParticipantAway(away);
         matchParticipants.setGroupParticipantHome(home);
         matchParticipants.setPlayoffStage(playoffStage);

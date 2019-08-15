@@ -24,4 +24,6 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     List<Group> findAllFinalsByTournamentUid(@Param("uid") String uid,
                                              @Param("playoffStage") PlayoffStage playoffStage);
 
+    Group findByTournamentIdAndPlayoffStageAndName(long tournamentId, PlayoffStage playoffStage, char name);
+
 }

@@ -54,6 +54,9 @@ public class Tournament {
     @ManyToOne
     private User userCreation;
 
+    @ManyToOne
+    private User userWinner;
+
     @Column
     @Enumerated(EnumType.STRING)
     private TournamentStage tournamentStage;
@@ -71,6 +74,9 @@ public class Tournament {
         dto.setTournamentTeams(tournamentTeams);
         dto.setUserCreationId(userCreation.getId());
         dto.setTournamentStage(tournamentStage);
+        if (userWinner != null) {
+            dto.setUserWinner(userWinner.toDTO());
+        }
 
         return dto;
     }

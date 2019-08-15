@@ -16,4 +16,6 @@ public interface MatchParticipantsRepository extends JpaRepository<MatchParticip
 
     List<MatchParticipants> findAllByTournamentIdAndPlayoffStageNotNull(long tournamentId);
 
+    List<MatchParticipants> findByGroupId(long groupId);
+
 }

@@ -23,6 +23,10 @@ public class MatchParticipants {
     private long id;
 
     @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
+
+    @ManyToOne
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 

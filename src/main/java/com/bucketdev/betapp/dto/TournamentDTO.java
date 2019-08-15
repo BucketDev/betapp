@@ -26,6 +26,7 @@ public class TournamentDTO implements Serializable {
     @JsonFormat(timezone = "GMT-06:00")
     private Calendar creationDate;
     private long userCreationId;
+    private UserDTO userWinner;
     private TournamentStage tournamentStage;
 
 }
