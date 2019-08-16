@@ -1,8 +1,6 @@
 package com.bucketdev.betapp.service.impl;
 
 import com.bucketdev.betapp.domain.*;
-import com.bucketdev.betapp.dto.GroupDTO;
-import com.bucketdev.betapp.dto.GroupParticipantDTO;
 import com.bucketdev.betapp.dto.TournamentDTO;
 import com.bucketdev.betapp.dto.UserDTO;
 import com.bucketdev.betapp.exception.group.GroupsNotFoundException;
@@ -150,7 +148,7 @@ public class TournamentServiceImpl implements TournamentService {
                 if (!tournamentSettings.isGroupRoundTrip()) {
                     oneTripMatches(tournament);
                 } else {
-                    // TODO create round trip group matches
+                    roundTripMatches(tournament);
                 }
             } else if (dto.getTournamentStage().equals(TournamentStage.FINALS_STAGE)){
                 assignFinalGroups(tournamentSettings, tournament.getUid());
@@ -167,18 +165,26 @@ public class TournamentServiceImpl implements TournamentService {
             case EIGHTH_FINALS:
                 if (!tournamentSettings.isEightFinalsRoundTrip())
                     oneTripFinalMatches(tournamentSettings.getTournament(), playoffStage);
+                else
+                    roundTripFinalMatches(tournamentSettings.getTournament(), playoffStage);
                 break;
             case QUARTER_FINALS:
                 if (!tournamentSettings.isQuarterFinalsRoundTrip())
                     oneTripFinalMatches(tournamentSettings.getTournament(), playoffStage);
+                else
+                    roundTripFinalMatches(tournamentSettings.getTournament(), playoffStage);
                 break;
             case SEMIFINALS:
                 if (!tournamentSettings.isSemiFinalsRoundTrip())
                     oneTripFinalMatches(tournamentSettings.getTournament(), playoffStage);
+                else
+                    roundTripFinalMatches(tournamentSettings.getTournament(), playoffStage);
                 break;
             case FINALS:
                 if (!tournamentSettings.isFinalRoundTrip())
                     oneTripFinalMatches(tournamentSettings.getTournament(), playoffStage);
+                else
+                    roundTripFinalMatches(tournamentSettings.getTournament(), playoffStage);
                 break;
         }
     }
@@ -194,10 +200,10 @@ public class TournamentServiceImpl implements TournamentService {
         int idxLastGroup = finalists.size() - 1;
         int idxFinalGroup = 0;
 
-        List<Group> finalGroups = groupRepository.findAllFinalsByTournamentUid(uid, tournamentSettings.getPlayoffStage());
+        List<Group> finalGroups = groupRepository.findAllPlayoffsByTournamentUidAndPlayoffStage(uid, tournamentSettings.getPlayoffStage());
         if (finalGroups == null || finalGroups.size() == 0) {
             tournamentSettingsService.generateFinalsGroups(tournamentSettings);
-            finalGroups = groupRepository.findAllFinalsByTournamentUid(uid, tournamentSettings.getPlayoffStage());
+            finalGroups = groupRepository.findAllPlayoffsByTournamentUidAndPlayoffStage(uid, tournamentSettings.getPlayoffStage());
         }
 
         do {
@@ -257,8 +263,28 @@ public class TournamentServiceImpl implements TournamentService {
         }
     }
 
+    private void roundTripMatches(Tournament tournament) {
+        List<Group> groups = groupRepository.findAllByTournamentUid(tournament.getUid());
+        if (groups == null || groups.size() == 0)
+            throw new GroupsNotFoundException("tournamentUid: " + tournament.getUid());
+        for (Group group : groups) {
+            List<GroupParticipant> groupParticipants = group.getGroupParticipants();
+            if (groupParticipants.size() < 2)
+                throw new GroupParticipantsNotSufficient("groupId: " + group.getId());
+            int arrayLikeSize = groupParticipants.size() - 1;
+            // pivot to hold the first team and make combinations with it
+            for (int i = 0; i <= arrayLikeSize; i++) {
+                // pivot to hold the next team and make combinations with it
+                for (int j = 0; j <= arrayLikeSize; j++) {
+                    if (j != i)
+                        saveMatch(group.getTournament(), group, groupParticipants.get(j), groupParticipants.get(i), null);
+                }
+            }
+        }
+    }
+
     private void oneTripFinalMatches(Tournament tournament, PlayoffStage playoffStage) {
-        List<Group> groups = groupRepository.findAllFinalsByTournamentUid(tournament.getUid(), playoffStage);
+        List<Group> groups = groupRepository.findAllPlayoffsByTournamentUidAndPlayoffStage(tournament.getUid(), playoffStage);
         if (groups == null || groups.size() == 0)
             throw new GroupsNotFoundException("tournamentUid: " + tournament.getUid());
         for (Group group : groups) {
@@ -277,6 +303,31 @@ public class TournamentServiceImpl implements TournamentService {
             // pivot to hold the next team and make combinations with it
             for (int j = i + 1; j <= arrayLikeSize; j++) {
                 saveMatch(group.getTournament(), group, groupParticipants.get(j), groupParticipants.get(i), playoffStage);
+            }
+        }
+    }
+
+    private void roundTripFinalMatches(Tournament tournament, PlayoffStage playoffStage) {
+        List<Group> groups = groupRepository.findAllPlayoffsByTournamentUidAndPlayoffStage(tournament.getUid(), playoffStage);
+        if (groups == null || groups.size() == 0)
+            throw new GroupsNotFoundException("tournamentUid: " + tournament.getUid());
+        for (Group group : groups) {
+            roundTripFinalMatchesPerGroup(group, playoffStage);
+        }
+    }
+
+    @Override
+    public void roundTripFinalMatchesPerGroup(Group group, PlayoffStage playoffStage) {
+        List<GroupParticipant> groupParticipants = group.getGroupParticipants();
+        if (groupParticipants.size() < 2)
+            throw new GroupParticipantsNotSufficient("groupId: " + group.getId());
+        int arrayLikeSize = groupParticipants.size() - 1;
+        // pivot to hold the first team and make combinations with it
+        for (int i = 0; i <= arrayLikeSize; i++) {
+            // pivot to hold the next team and make combinations with it
+            for (int j = 0; j <= arrayLikeSize; j++) {
+                if (j != i)
+                    saveMatch(group.getTournament(), group, groupParticipants.get(j), groupParticipants.get(i), playoffStage);
             }
         }
     }

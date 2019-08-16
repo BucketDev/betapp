@@ -8,6 +8,7 @@ public interface GroupService {
 
     GroupDTO save(GroupDTO dto);
 
-    List<GroupDTO> findByTournamentUid(String uid);
+    List<GroupDTO> findAllByTournamentUid(String uid);
 
+    List<GroupDTO> findAllPlayoffsByTournamentUid(String uid);
 }

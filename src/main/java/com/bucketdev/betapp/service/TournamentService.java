@@ -14,4 +14,5 @@ public interface TournamentService {
     TournamentDTO updateTournamentStage(TournamentDTO dto);
     void oneTripFinalMatchesPerGroup(Group group, PlayoffStage playoffStage);
 
+    void roundTripFinalMatchesPerGroup(Group group, PlayoffStage playoffStage);
 }

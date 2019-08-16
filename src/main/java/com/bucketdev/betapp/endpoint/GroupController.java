@@ -24,7 +24,12 @@ public class GroupController {
 
     @GetMapping("/tournament/{uid}")
     public ResponseEntity<List<GroupDTO>> findByTournamentUid(@PathVariable String uid) {
-        return new ResponseEntity<>(service.findByTournamentUid(uid), HttpStatus.OK);
+        return new ResponseEntity<>(service.findAllByTournamentUid(uid), HttpStatus.OK);
+    }
+
+    @GetMapping("/tournament/{uid}/playoffs")
+    public ResponseEntity<List<GroupDTO>> findAllPlayoffsByTournamentUid(@PathVariable String uid) {
+        return new ResponseEntity<>(service.findAllPlayoffsByTournamentUid(uid), HttpStatus.OK);
     }
 
 }

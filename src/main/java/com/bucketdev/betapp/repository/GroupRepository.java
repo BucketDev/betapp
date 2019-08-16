@@ -20,9 +20,12 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     @Query("SELECT g FROM Group g WHERE g.tournament.uid = :uid AND g.playoffStage IS NULL ORDER BY g.name")
     List<Group> findAllByTournamentUid(@Param("uid") String uid);
 
+    @Query("SELECT g FROM Group g WHERE g.tournament.uid = :uid AND g.playoffStage IS NOT NULL ORDER BY g.name")
+    List<Group> findAllPlayoffsByTournamentUid(@Param("uid") String uid);
+
     @Query("SELECT g FROM Group g WHERE g.tournament.uid = :uid AND g.playoffStage = :playoffStage ORDER BY g.name")
-    List<Group> findAllFinalsByTournamentUid(@Param("uid") String uid,
-                                             @Param("playoffStage") PlayoffStage playoffStage);
+    List<Group> findAllPlayoffsByTournamentUidAndPlayoffStage(@Param("uid") String uid,
+                                                              @Param("playoffStage") PlayoffStage playoffStage);
 
     Group findByTournamentIdAndPlayoffStageAndName(long tournamentId, PlayoffStage playoffStage, char name);
 

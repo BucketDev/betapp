@@ -174,18 +174,26 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
             case EIGHTH_FINALS:
                 if (!tournamentSettings.isEightFinalsRoundTrip())
                     tournamentService.oneTripFinalMatchesPerGroup(group, playoffStage);
+                else
+                    tournamentService.roundTripFinalMatchesPerGroup(group, playoffStage);
                 break;
             case QUARTER_FINALS:
                 if (!tournamentSettings.isQuarterFinalsRoundTrip())
                     tournamentService.oneTripFinalMatchesPerGroup(group, playoffStage);
+                else
+                    tournamentService.roundTripFinalMatchesPerGroup(group, playoffStage);
                 break;
             case SEMIFINALS:
                 if (!tournamentSettings.isSemiFinalsRoundTrip())
                     tournamentService.oneTripFinalMatchesPerGroup(group, playoffStage);
+                else
+                    tournamentService.roundTripFinalMatchesPerGroup(group, playoffStage);
                 break;
             case FINALS:
                 if (!tournamentSettings.isFinalRoundTrip())
                     tournamentService.oneTripFinalMatchesPerGroup(group, playoffStage);
+                else
+                    tournamentService.roundTripFinalMatchesPerGroup(group, playoffStage);
                 break;
         }
     }

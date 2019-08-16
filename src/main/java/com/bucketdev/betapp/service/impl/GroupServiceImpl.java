@@ -33,8 +33,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<GroupDTO> findByTournamentUid(String uid) {
+    public List<GroupDTO> findAllByTournamentUid(String uid) {
         return repository.findAllByTournamentUid(uid).stream().map(Group::toDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GroupDTO> findAllPlayoffsByTournamentUid(String uid) {
+        return repository.findAllPlayoffsByTournamentUid(uid).stream().map(Group::toDTO).collect(Collectors.toList());
     }
 
 }
