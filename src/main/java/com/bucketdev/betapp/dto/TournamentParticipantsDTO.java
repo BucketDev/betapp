@@ -20,6 +20,7 @@ public class TournamentParticipantsDTO implements Serializable {
     private String photoUrl;
     private Date creationDate;
     private long userCreationId;
-    private Set<UserDTO> participants;
+    private boolean userWinner;
+    private long participantsNumber;
 
 }

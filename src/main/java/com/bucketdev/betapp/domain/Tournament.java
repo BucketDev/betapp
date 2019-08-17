@@ -74,9 +74,8 @@ public class Tournament {
         dto.setTournamentTeams(tournamentTeams);
         dto.setUserCreationId(userCreation.getId());
         dto.setTournamentStage(tournamentStage);
-        if (userWinner != null) {
+        if (userWinner != null)
             dto.setUserWinner(userWinner.toDTO());
-        }
 
         return dto;
     }

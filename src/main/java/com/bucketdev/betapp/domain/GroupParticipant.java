@@ -17,6 +17,19 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class GroupParticipant {
 
+    public GroupParticipant(Group group, User participant, int points) {
+        this.setGroup(group);
+        this.setTournament(group.getTournament());
+        this.setUser(participant);
+        this.setGamesPlayed(0);
+        this.setGamesWon(0);
+        this.setGamesTied(0);
+        this.setGamesLost(0);
+        this.setPoints(points);
+    }
+
+    public GroupParticipant() { }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

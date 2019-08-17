@@ -42,6 +42,9 @@ public class TournamentParticipants {
     @ManyToOne
     private User userCreation;
 
+    @ManyToOne
+    private User userWinner;
+
     @ManyToMany
     @JoinTable(name = "participants",
             joinColumns = @JoinColumn(name = "tournament_id"),
@@ -58,7 +61,8 @@ public class TournamentParticipants {
         dto.setPhotoUrl(photoUrl);
         dto.setCreationDate(creationDate);
         dto.setUserCreationId(userCreation.getId());
-        dto.setParticipants(participants.stream().map(User::toDTO).collect(Collectors.toSet()));
+        dto.setParticipantsNumber(participants.size());
+        dto.setUserWinner(userWinner != null);
 
         return dto;
     }

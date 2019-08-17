@@ -26,5 +26,6 @@ public class TournamentDetailsDTO implements Serializable {
     private Set<UserDTO> participants;
     private PoolSettingsDTO poolSettings;
     private TournamentSettingsDTO tournamentSettings;
+    private UserDTO userWinner;
 
 }

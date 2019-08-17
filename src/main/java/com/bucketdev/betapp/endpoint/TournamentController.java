@@ -38,4 +38,10 @@ public class TournamentController {
         return new ResponseEntity<>(service.updateTournamentStage(dto), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{uid}")
+    public ResponseEntity deleteTournament(@PathVariable String uid) {
+        service.deleteTournament(uid);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
 }

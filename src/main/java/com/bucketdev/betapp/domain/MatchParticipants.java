@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Calendar;
 
 /**
@@ -58,6 +59,10 @@ public class MatchParticipants {
     @Enumerated(EnumType.STRING)
     private PlayoffStage playoffStage;
 
+    @Column
+    @NotNull
+    private int round;
+
     public MatchParticipantsDTO toDTO() {
         MatchParticipantsDTO dto = new MatchParticipantsDTO();
 
@@ -72,6 +77,8 @@ public class MatchParticipants {
         dto.setScoreHome(scoreHome);
         dto.setScheduledTime(scheduledTime);
         dto.setRegisteredTime(registeredTime);
+        dto.setPlayoffStage(playoffStage);
+        dto.setRound(round);
 
         return dto;
     }

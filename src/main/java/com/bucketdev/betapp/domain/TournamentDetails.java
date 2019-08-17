@@ -59,6 +59,9 @@ public class TournamentDetails {
     @OneToOne(mappedBy = "tournament", cascade = CascadeType.ALL, optional = false)
     private TournamentSettings tournamentSettings;
 
+    @ManyToOne
+    private User userWinner;
+
     public TournamentDetailsDTO toDTO() {
         TournamentDetailsDTO dto = new TournamentDetailsDTO();
 
@@ -74,6 +77,8 @@ public class TournamentDetails {
             dto.setPoolSettings(poolSettings.toDTO());
         if(tournamentSettings != null)
             dto.setTournamentSettings(tournamentSettings.toDTO());
+        if (userWinner != null)
+            dto.setUserWinner(userWinner.toDTO());
 
         return dto;
     }

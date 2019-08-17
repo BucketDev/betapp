@@ -11,13 +11,12 @@ import com.bucketdev.betapp.repository.TournamentSettingsRepository;
 import com.bucketdev.betapp.service.MatchParticipantsService;
 import com.bucketdev.betapp.service.TournamentService;
 import com.bucketdev.betapp.type.PlayoffStage;
+import com.bucketdev.betapp.type.TournamentStage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -70,20 +69,13 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
             matchParticipants.setRegisteredTime(Calendar.getInstance());
             if (matchParticipants.getPlayoffStage() == null)
                 calculatePoints(matchParticipants);
+            else {
+                calculateNextGroup(matchParticipants);
+            }
         }
         matchParticipants.setScheduledTime(dto.getScheduledTime());
 
-        MatchParticipantsDTO savedDOT = repository.save(matchParticipants).toDTO();
-
-        //if it is a playoff match
-        if (matchParticipants.getPlayoffStage() != null)
-            try {
-                calculateNextGroup(matchParticipants);
-            } catch (GroupParticipantsNotSufficient gpns) {
-                System.out.println(gpns.getMessage());
-            }
-
-        return savedDOT;
+        return repository.save(matchParticipants).toDTO();
     }
 
     private void calculatePoints(MatchParticipants matchParticipants) {
@@ -117,84 +109,53 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
         switch (playoffStage) {
             case EIGHTH_FINALS:
                 if (group.getName() == 'A' || group.getName() == 'B')
-                    assignGroupParticipant(matchParticipants, tournamentSettings, PlayoffStage.QUARTER_FINALS, 'A', 'A');
+                    assignNextPlayoffGroup(matchParticipants, tournamentSettings, PlayoffStage.QUARTER_FINALS, 'A', 'A');
                 if (group.getName() == 'C' || group.getName() == 'D')
-                    assignGroupParticipant(matchParticipants, tournamentSettings, PlayoffStage.QUARTER_FINALS, 'C', 'B');
+                    assignNextPlayoffGroup(matchParticipants, tournamentSettings, PlayoffStage.QUARTER_FINALS, 'C', 'B');
                 if (group.getName() == 'E' || group.getName() == 'F')
-                    assignGroupParticipant(matchParticipants, tournamentSettings, PlayoffStage.QUARTER_FINALS, 'E', 'C');
+                    assignNextPlayoffGroup(matchParticipants, tournamentSettings, PlayoffStage.QUARTER_FINALS, 'E', 'C');
                 if (group.getName() == 'G' || group.getName() == 'H')
-                    assignGroupParticipant(matchParticipants, tournamentSettings, PlayoffStage.QUARTER_FINALS, 'G', 'D');
+                    assignNextPlayoffGroup(matchParticipants, tournamentSettings, PlayoffStage.QUARTER_FINALS, 'G', 'D');
                 break;
             case QUARTER_FINALS:
                 if (group.getName() == 'A' || group.getName() == 'B')
-                    assignGroupParticipant(matchParticipants, tournamentSettings, PlayoffStage.SEMIFINALS, 'A', 'A');
+                    assignNextPlayoffGroup(matchParticipants, tournamentSettings, PlayoffStage.SEMIFINALS, 'A', 'A');
                 if (group.getName() == 'C' || group.getName() == 'D')
-                    assignGroupParticipant(matchParticipants, tournamentSettings, PlayoffStage.SEMIFINALS, 'C', 'B');
+                    assignNextPlayoffGroup(matchParticipants, tournamentSettings, PlayoffStage.SEMIFINALS, 'C', 'B');
                 break;
             case SEMIFINALS:
                 if (group.getName() == 'A' || group.getName() == 'B')
-                    assignGroupParticipant(matchParticipants, tournamentSettings, PlayoffStage.FINALS, 'A', 'A');
+                    assignNextPlayoffGroup(matchParticipants, tournamentSettings, PlayoffStage.FINALS, 'A', 'A');
                 break;
             case FINALS:
                 User user = getWinnerUser(tournamentSettings, matchParticipants, playoffStage);
                 if (user != null) {
                     tournament.setUserWinner(user);
+                    tournament.setTournamentStage(TournamentStage.FINISHED_TOURNAMENT);
                 }
                 break;
 
         }
     }
 
-    private void assignGroupParticipant(MatchParticipants matchParticipants, TournamentSettings tournamentSettings,
+    private void assignNextPlayoffGroup(MatchParticipants matchParticipants, TournamentSettings tournamentSettings,
                                         PlayoffStage nextPLayoffStage, char initialGroupName, char nextGroupName) {
         PlayoffStage playoffStage = matchParticipants.getPlayoffStage();
         Tournament tournament = matchParticipants.getTournament();
         Group group = matchParticipants.getGroup();
 
         Group nextGroup = groupRepository.findByTournamentIdAndPlayoffStageAndName(tournament.getId(), nextPLayoffStage, nextGroupName);
+        //Validate if there's a winner now
         User user = getWinnerUser(tournamentSettings, matchParticipants, playoffStage);
         if (user != null) {
-            if (group.getName() == initialGroupName) {
-                GroupParticipant groupParticipant = getNewParticipant(nextGroup, user, 1);
-                groupParticipantRepository.save(groupParticipant);
-            } else {
-                GroupParticipant groupParticipant = getNewParticipant(nextGroup, user, 0);
-                groupParticipantRepository.save(groupParticipant);
-            }
-        }
-        Optional<Group> optionalGroup = groupRepository.findById(nextGroup.getId());
-        //if all of the participants of the next group are already there, calculate match(es)
-        if (optionalGroup.isPresent() && optionalGroup.get().getGroupParticipants().size() == 2) {
-            calculateNextMatches(tournamentSettings, optionalGroup.get(), nextPLayoffStage);
-        }
-    }
-
-    private void calculateNextMatches(TournamentSettings tournamentSettings, Group group, PlayoffStage playoffStage) {
-        switch (playoffStage) {
-            case EIGHTH_FINALS:
-                if (!tournamentSettings.isEightFinalsRoundTrip())
-                    tournamentService.oneTripFinalMatchesPerGroup(group, playoffStage);
-                else
-                    tournamentService.roundTripFinalMatchesPerGroup(group, playoffStage);
-                break;
-            case QUARTER_FINALS:
-                if (!tournamentSettings.isQuarterFinalsRoundTrip())
-                    tournamentService.oneTripFinalMatchesPerGroup(group, playoffStage);
-                else
-                    tournamentService.roundTripFinalMatchesPerGroup(group, playoffStage);
-                break;
-            case SEMIFINALS:
-                if (!tournamentSettings.isSemiFinalsRoundTrip())
-                    tournamentService.oneTripFinalMatchesPerGroup(group, playoffStage);
-                else
-                    tournamentService.roundTripFinalMatchesPerGroup(group, playoffStage);
-                break;
-            case FINALS:
-                if (!tournamentSettings.isFinalRoundTrip())
-                    tournamentService.oneTripFinalMatchesPerGroup(group, playoffStage);
-                else
-                    tournamentService.roundTripFinalMatchesPerGroup(group, playoffStage);
-                break;
+            if (group.getName() == initialGroupName)
+                groupParticipantRepository.save(new GroupParticipant(nextGroup, user, 1));
+            else
+                groupParticipantRepository.save(new GroupParticipant(nextGroup, user, 0));
+            Optional<Group> optionalGroup = groupRepository.findById(nextGroup.getId());
+            //if all of the participants of the next group are already there, calculate match(es)
+            if (optionalGroup.isPresent() && optionalGroup.get().getGroupParticipants().size() == 2)
+                calculateNextMatches(tournamentSettings, optionalGroup.get(), nextPLayoffStage);
         }
     }
 
@@ -224,6 +185,7 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
         User user;
         if (isRoundTrip) {
             for (MatchParticipants oldMatchParticipant: matchParticipantsRepository.findByGroupId(group.getId())) {
+                //If the match has not occurred yet
                 if(oldMatchParticipant.getRegisteredTime() == null)
                     return null;
                 if (matchParticipants.getGroupParticipantHome().equals(oldMatchParticipant.getGroupParticipantHome()))
@@ -246,18 +208,67 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
         return user;
     }
 
-    private GroupParticipant getNewParticipant(Group group, User participant, int points) {
-        GroupParticipant groupParticipant = new GroupParticipant();
-        groupParticipant.setGroup(group);
-        groupParticipant.setTournament(group.getTournament());
-        groupParticipant.setUser(participant);
-        groupParticipant.setGamesPlayed(0);
-        groupParticipant.setGamesWon(0);
-        groupParticipant.setGamesTied(0);
-        groupParticipant.setGamesLost(0);
-        groupParticipant.setPoints(points);
+    private void calculateNextMatches(TournamentSettings tournamentSettings, Group group, PlayoffStage playoffStage) {
+        switch (playoffStage) {
+            case EIGHTH_FINALS:
+                calculateMatches(group, tournamentSettings.isEightFinalsRoundTrip(), playoffStage);
+                break;
+            case QUARTER_FINALS:
+                calculateMatches(group, tournamentSettings.isQuarterFinalsRoundTrip(), playoffStage);
+                break;
+            case SEMIFINALS:
+                calculateMatches(group, tournamentSettings.isSemiFinalsRoundTrip(), playoffStage);
+                break;
+            case FINALS:
+                calculateMatches(group, tournamentSettings.isFinalRoundTrip(), playoffStage);
+                break;
+        }
+    }
 
-        return groupParticipant;
+    @Override
+    public void calculateMatches(Group group, boolean roundTrip, PlayoffStage playoffStage) {
+        Tournament tournament = group.getTournament();
+        List<GroupParticipant> groupParticipants = group.getGroupParticipants();
+        int size = groupParticipants.size();
+        boolean oddParticipants = groupParticipants.size() % 2 == 1;
+        if (oddParticipants) {
+            groupParticipants.add(new GroupParticipant());
+            size++;
+        }
+        Stack<GroupParticipant> awayStack = new Stack<>();
+        awayStack.addAll(groupParticipants.subList(0, size / 2));
+        Stack<GroupParticipant> homeStack = new Stack<>();
+        homeStack.addAll(groupParticipants.subList(size / 2, size));
+        List<MatchParticipants> matches = new ArrayList<>();
+        for (int round = 1; round < size; round++) {
+            for (int i = 0; i < size / 2; i++) {
+                if(awayStack.get(i).getId() > 0 && homeStack.get(i).getId() > 0) {
+                    matches.add(
+                        createMatch(tournament, group, awayStack.get(i), homeStack.get(i), round, playoffStage));
+                    if (roundTrip)
+                        matches.add(
+                            createMatch(tournament, group, homeStack.get(i), awayStack.get(i),
+                                oddParticipants ? round + size : round + size -1, playoffStage));
+                }
+            }
+            if (size > 2) {
+                homeStack.push(awayStack.pop());
+                awayStack.add(1, homeStack.remove(0));
+            }
+        }
+        matchParticipantsRepository.saveAll(matches);
+    }
+
+    private MatchParticipants createMatch(Tournament tournament, Group group, GroupParticipant away, GroupParticipant home, int round, PlayoffStage playoffStage) {
+        MatchParticipants matchParticipants = new MatchParticipants();
+        matchParticipants.setTournament(tournament);
+        matchParticipants.setGroup(group);
+        matchParticipants.setGroupParticipantAway(away);
+        matchParticipants.setGroupParticipantHome(home);
+        matchParticipants.setRound(round);
+        matchParticipants.setPlayoffStage(playoffStage);
+
+        return matchParticipants;
     }
 
 }

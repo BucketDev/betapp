@@ -12,7 +12,5 @@ public interface TournamentService {
     UserDTO addParticipant(long id, UserDTO userDTO);
     TournamentDTO updatePhotoUrl(long id, TournamentDTO dto);
     TournamentDTO updateTournamentStage(TournamentDTO dto);
-    void oneTripFinalMatchesPerGroup(Group group, PlayoffStage playoffStage);
-
-    void roundTripFinalMatchesPerGroup(Group group, PlayoffStage playoffStage);
+    void deleteTournament(String uid);
 }
