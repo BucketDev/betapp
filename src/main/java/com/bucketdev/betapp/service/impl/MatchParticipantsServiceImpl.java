@@ -2,7 +2,6 @@ package com.bucketdev.betapp.service.impl;
 
 import com.bucketdev.betapp.domain.*;
 import com.bucketdev.betapp.dto.MatchParticipantsDTO;
-import com.bucketdev.betapp.exception.groupParticipant.GroupParticipantsNotSufficient;
 import com.bucketdev.betapp.exception.matchParticipants.MatchParticipantsNotFoundException;
 import com.bucketdev.betapp.repository.GroupParticipantRepository;
 import com.bucketdev.betapp.repository.GroupRepository;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author rodrigo.loyola
@@ -44,15 +42,31 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
     private TournamentService tournamentService;
 
     @Override
-    public List<MatchParticipantsDTO> findAllByTournamentId(long tournamentId) {
-        return repository.findAllByTournamentIdAndPlayoffStageIsNull(tournamentId).stream()
-                .map(MatchParticipants::toDTO).collect(Collectors.toList());
+    public Map<Integer, List<MatchParticipantsDTO>> findAllByTournamentId(long tournamentId) {
+        Map<Integer, List<MatchParticipantsDTO>> rounds = new HashMap<>();
+        repository.findAllByTournamentIdAndPlayoffStageIsNull(tournamentId)
+                .forEach(matchParticipants -> {
+                    int round = matchParticipants.getRound();
+                    List<MatchParticipantsDTO> matches = rounds.get(round);
+                    if (matches == null) matches = new ArrayList<>();
+                    matches.add(matchParticipants.toDTO());
+                    rounds.put(round, matches);
+                });
+        return rounds;
     }
 
     @Override
-    public List<MatchParticipantsDTO> findAllPlayoffsByTournamentId(long tournamentId) {
-        return repository.findAllByTournamentIdAndPlayoffStageNotNull(tournamentId).stream()
-                .map(MatchParticipants::toDTO).collect(Collectors.toList());
+    public Map<PlayoffStage, List<MatchParticipantsDTO>> findAllPlayoffsByTournamentId(long tournamentId) {
+        Map<PlayoffStage, List<MatchParticipantsDTO>> rounds = new TreeMap<>(Comparator.comparingInt(PlayoffStage::getOrder));
+        repository.findAllByTournamentIdAndPlayoffStageNotNull(tournamentId)
+                .forEach(matchParticipants -> {
+                    PlayoffStage playoffStage = matchParticipants.getPlayoffStage();
+                    List<MatchParticipantsDTO> matches = rounds.get(playoffStage);
+                    if (matches == null) matches = new ArrayList<>();
+                    matches.add(matchParticipants.toDTO());
+                    rounds.put(playoffStage, matches);
+                });
+        return rounds;
     }
 
     @Override
@@ -70,7 +84,7 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
             if (matchParticipants.getPlayoffStage() == null)
                 calculatePoints(matchParticipants);
             else {
-                calculateNextGroup(matchParticipants);
+                calculateNextPlayoffGroup(matchParticipants);
             }
         }
         matchParticipants.setScheduledTime(dto.getScheduledTime());
@@ -101,7 +115,7 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
         }
     }
 
-    private void calculateNextGroup(MatchParticipants matchParticipants) {
+    private void calculateNextPlayoffGroup(MatchParticipants matchParticipants) {
         Tournament tournament = matchParticipants.getTournament();
         TournamentSettings tournamentSettings = tournamentSettingsRepository.findByTournamentUid(tournament.getUid());
         PlayoffStage playoffStage = matchParticipants.getPlayoffStage();

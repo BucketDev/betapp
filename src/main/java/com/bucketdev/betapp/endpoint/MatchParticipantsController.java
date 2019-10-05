@@ -2,12 +2,14 @@ package com.bucketdev.betapp.endpoint;
 
 import com.bucketdev.betapp.dto.MatchParticipantsDTO;
 import com.bucketdev.betapp.service.MatchParticipantsService;
+import com.bucketdev.betapp.type.PlayoffStage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author rodrigo.loyola
@@ -20,12 +22,12 @@ public class MatchParticipantsController {
     private MatchParticipantsService service;
 
     @GetMapping("tournament/{tournamentId}")
-    public ResponseEntity<List<MatchParticipantsDTO>> findAllByTournamentId(@PathVariable long tournamentId) {
+    public ResponseEntity<Map<Integer, List<MatchParticipantsDTO>>> findAllByTournamentId(@PathVariable long tournamentId) {
         return new ResponseEntity<>(service.findAllByTournamentId(tournamentId), HttpStatus.OK);
     }
 
     @GetMapping("tournament/{tournamentId}/playoffs")
-    public ResponseEntity<List<MatchParticipantsDTO>> findAllPlayoffsByTournamentId(@PathVariable long tournamentId) {
+    public ResponseEntity<Map<PlayoffStage, List<MatchParticipantsDTO>>> findAllPlayoffsByTournamentId(@PathVariable long tournamentId) {
         return new ResponseEntity<>(service.findAllPlayoffsByTournamentId(tournamentId), HttpStatus.OK);
     }
 

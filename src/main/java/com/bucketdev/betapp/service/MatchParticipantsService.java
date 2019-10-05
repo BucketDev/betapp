@@ -5,15 +5,16 @@ import com.bucketdev.betapp.dto.MatchParticipantsDTO;
 import com.bucketdev.betapp.type.PlayoffStage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author rodrigo.loyola
  */
 public interface MatchParticipantsService {
 
-    List<MatchParticipantsDTO> findAllByTournamentId(long tournamentId);
+    Map<Integer, List<MatchParticipantsDTO>> findAllByTournamentId(long tournamentId);
 
-    List<MatchParticipantsDTO> findAllPlayoffsByTournamentId(long tournamentId);
+    Map<PlayoffStage, List<MatchParticipantsDTO>> findAllPlayoffsByTournamentId(long tournamentId);
 
     MatchParticipantsDTO update(MatchParticipantsDTO dto);
 

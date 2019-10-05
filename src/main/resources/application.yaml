@@ -1,0 +1,16 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: betapp
+  datasource:
+    url: jdbc:mysql://bucketdev.site:3306/betapp-bucketdev?useLegacyDatetimeCode=false&autoReconnect=true
+    username: betapp
+    password: cwf9yddkti99
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+    hibernate:
+      ddl-auto: update

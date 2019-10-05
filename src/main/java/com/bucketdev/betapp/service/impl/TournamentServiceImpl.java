@@ -131,7 +131,7 @@ public class TournamentServiceImpl implements TournamentService {
     public TournamentDTO updateTournamentStage(TournamentDTO dto) {
         Optional<Tournament> optionalTournament = repository.findById(dto.getId());
         if(!optionalTournament.isPresent())
-            throw new UserNotFoundException("id:" + dto.getId());
+            throw new TournamentNotFoundException("id:" + dto.getId());
         Tournament tournament = optionalTournament.get();
         if (!isValidStage(tournament.getTournamentStage(), dto.getTournamentStage()))
             throw new TournamentWrongStageException("from: " + tournament.getTournamentStage() + ", to: " + dto.getTournamentStage());
@@ -200,22 +200,23 @@ public class TournamentServiceImpl implements TournamentService {
         }
         int idxFirstGroup = 0;
         int idxLastGroup = finalists.size() - 1;
-        int idxFinalGroup = 0;
+        int idxPlayoffGroup = 0;
         List<GroupParticipant> newFinalists = new ArrayList<>();
         do {
             int idxFirstPlace = 0;
             int idxLastPlace = tournamentSettings.getFirst() - 1;
             Group groupA = finalists.get(idxFirstGroup);
             Group groupB = finalists.get(idxLastGroup);
+            // if it is the same group, then the number of groups was an odd number
             while (groupA.equals(groupB) ? idxFirstPlace < idxLastPlace : idxFirstPlace < tournamentSettings.getFirst()) {
-                Group finalGroup = finalGroups.get(idxFinalGroup);
+                Group finalGroup = finalGroups.get(idxPlayoffGroup);
                 newFinalists.add(
                     new GroupParticipant(finalGroup,
                         groupA.getGroupParticipants().get(idxFirstPlace).getUser(), 0));
                 newFinalists.add(
                     new GroupParticipant(finalGroup,
                         groupB.getGroupParticipants().get(idxLastPlace).getUser(), 0));
-                idxFinalGroup++;
+                idxPlayoffGroup++;
                 idxFirstPlace++;
                 idxLastPlace--;
             }
