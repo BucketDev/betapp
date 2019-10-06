@@ -19,5 +19,6 @@ public class GroupDTO implements Serializable {
     private long tournamentId;
     private PlayoffStage playoffStage;
     private List<GroupParticipantDTO> groupParticipants;
+    private List<GroupTeamDTO> groupTeams;
 
 }

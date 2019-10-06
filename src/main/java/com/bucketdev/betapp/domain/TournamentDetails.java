@@ -40,6 +40,10 @@ public class TournamentDetails {
 
     @NotNull
     @Column
+    private boolean tournamentTeams;
+
+    @NotNull
+    @Column
     @Temporal(value = TemporalType.DATE)
     private Calendar creationDate;
 
@@ -70,6 +74,7 @@ public class TournamentDetails {
         dto.setTitle(title);
         dto.setPhotoUrl(photoUrl);
         dto.setTournamentGroups(tournamentGroups);
+        dto.setTournamentTeams(tournamentTeams);
         dto.setCreationDate(creationDate);
         dto.setUserCreationId(userCreation.getId());
         dto.setParticipants(participants.stream().map(User::toDTO).collect(Collectors.toSet()));

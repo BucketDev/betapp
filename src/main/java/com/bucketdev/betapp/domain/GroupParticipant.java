@@ -2,6 +2,7 @@ package com.bucketdev.betapp.domain;
 
 import com.bucketdev.betapp.dto.GroupParticipantDTO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "group_participants")
 @Getter
 @Setter
+@NoArgsConstructor
 public class GroupParticipant {
 
     public GroupParticipant(Group group, User participant, int points) {
@@ -27,8 +29,6 @@ public class GroupParticipant {
         this.setGamesLost(0);
         this.setPoints(points);
     }
-
-    public GroupParticipant() { }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

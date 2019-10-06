@@ -14,6 +14,7 @@ public class GroupTeamDTO implements Serializable {
 
     private long id;
     private long groupId;
+    private char groupName;
     private long tournamentId;
     private TeamDTO team;
     private int gamesPlayed;

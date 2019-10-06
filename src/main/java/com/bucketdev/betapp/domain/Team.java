@@ -20,8 +20,11 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
     @NotNull
+    @ManyToOne
+    private Tournament tournament;
+
+    @Column
     private String uid;
 
     @Column
@@ -38,8 +41,16 @@ public class Team {
         dto.setUid(uid);
         dto.setPhotoUrl(photoUrl);
         dto.setName(name);
+        if (tournament != null)
+            dto.setTournamentId(tournament.getId());
 
         return dto;
+    }
+
+    public void setValuesFromDTO(TeamDTO dto) {
+        name = dto.getName();
+        uid = dto.getUid();
+        photoUrl = dto.getPhotoUrl();
     }
 
 }

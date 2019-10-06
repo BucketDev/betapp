@@ -2,6 +2,7 @@ package com.bucketdev.betapp.domain;
 
 import com.bucketdev.betapp.dto.GroupTeamDTO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -15,7 +16,19 @@ import javax.validation.constraints.NotNull;
 @Table(name = "group_teams")
 @Getter
 @Setter
+@NoArgsConstructor
 public class GroupTeam {
+
+    public GroupTeam(Group group, Team team, int points) {
+        this.setGroup(group);
+        this.setTournament(group.getTournament());
+        this.setTeam(team);
+        this.setGamesPlayed(0);
+        this.setGamesWon(0);
+        this.setGamesTied(0);
+        this.setGamesLost(0);
+        this.setPoints(points);
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +44,6 @@ public class GroupTeam {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "team_id")
     private Team team;
 
     @Column
@@ -58,17 +70,20 @@ public class GroupTeam {
         GroupTeamDTO dto = new GroupTeamDTO();
 
         dto.setId(id);
-        if (group != null)
-            dto.setGroupId(group.getId());
-        if (tournament != null)
-            dto.setTournamentId(tournament.getId());
-        if (team != null)
-            dto.setTeam(team.toDTO());
         dto.setGamesPlayed(gamesPlayed);
         dto.setGamesWon(gamesWon);
         dto.setGamesTied(gamesTied);
         dto.setGamesLost(gamesLost);
         dto.setPoints(points);
+
+        if (team != null)
+            dto.setTeam(team.toDTO());
+        if (group != null) {
+            dto.setGroupId(group.getId());
+            dto.setGroupName(group.getName());
+        }
+        if (tournament != null)
+            dto.setTournamentId(tournament.getId());
 
         return dto;
     }

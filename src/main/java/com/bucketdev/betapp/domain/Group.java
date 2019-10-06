@@ -47,6 +47,10 @@ public class Group {
     @OrderBy("points DESC, gamesWon DESC")
     private List<GroupParticipant> groupParticipants;
 
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("points DESC, gamesWon DESC")
+    private List<GroupTeam> groupTeams;
+
     public GroupDTO toDTO() {
         GroupDTO dto = new GroupDTO();
 
@@ -55,6 +59,7 @@ public class Group {
         dto.setTournamentId(tournament.getId());
         dto.setPlayoffStage(playoffStage);
         dto.setGroupParticipants(groupParticipants.stream().map(GroupParticipant::toDTO).collect(Collectors.toList()));
+        dto.setGroupTeams(groupTeams.stream().map(GroupTeam::toDTO).collect(Collectors.toList()));
 
         return dto;
     }

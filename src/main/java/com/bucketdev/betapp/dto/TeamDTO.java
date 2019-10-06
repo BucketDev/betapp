@@ -13,6 +13,7 @@ import java.io.Serializable;
 public class TeamDTO implements Serializable {
 
     private long id;
+    private long tournamentId;
     private String uid;
     private String photoUrl;
     private String name;
