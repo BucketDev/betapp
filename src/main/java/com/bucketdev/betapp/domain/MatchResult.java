@@ -2,12 +2,14 @@ package com.bucketdev.betapp.domain;
 
 import com.bucketdev.betapp.dto.MatchResultDTO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @author rodrigo.loyola
@@ -16,7 +18,18 @@ import java.util.Calendar;
 @Table(name = "match_results")
 @Getter
 @Setter
+@NoArgsConstructor
 public class MatchResult {
+
+    public MatchResult(Tournament tournament, MatchTeams matchTeams, User user) {
+        this.setTournament(tournament);
+        this.setMatchTeams(matchTeams);
+        this.setUser(user);
+        this.setScoreAway(0);
+        this.setScoreHome(0);
+        this.setPoints(0);
+        this.setCreationTime(Calendar.getInstance());
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +37,7 @@ public class MatchResult {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User participant;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "tournament_id")
@@ -36,15 +49,15 @@ public class MatchResult {
 
     @Column
     @Min(value = 0)
-    private Integer scoreAway;
+    private int scoreAway;
 
     @Column
     @Min(value = 0)
-    private Integer scoreHome;
+    private int scoreHome;
 
     @Column
     @Min(value = 0)
-    private Integer points;
+    private int points;
 
     @Column
     @NotNull
@@ -55,8 +68,8 @@ public class MatchResult {
         MatchResultDTO dto = new MatchResultDTO();
 
         dto.setId(id);
-        if (participant != null)
-            dto.setParticipant(participant.toDTO());
+        if (user != null)
+            dto.setUserId(user.getId());
         if (tournament != null)
             dto.setTournamentId(tournament.getId());
         if (matchTeams != null)

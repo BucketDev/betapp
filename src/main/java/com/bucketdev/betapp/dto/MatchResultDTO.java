@@ -15,7 +15,7 @@ import java.util.Calendar;
 public class MatchResultDTO implements Serializable {
 
     private long id;
-    private UserDTO participant;
+    private long userId;
     private long tournamentId;
     private long matchTeamsId;
     private int scoreAway;

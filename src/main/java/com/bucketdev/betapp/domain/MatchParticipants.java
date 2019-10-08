@@ -24,10 +24,12 @@ public class MatchParticipants {
     private long id;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "group_id")
     private Group group;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 

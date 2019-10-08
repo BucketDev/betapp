@@ -36,9 +36,6 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
     private TournamentSettingsRepository tournamentSettingsRepository;
 
     @Autowired
-    private MatchParticipantsRepository matchParticipantsRepository;
-
-    @Autowired
     private TournamentService tournamentService;
 
     @Override
@@ -198,7 +195,7 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
         Group group = matchParticipants.getGroup();
         User user;
         if (isRoundTrip) {
-            for (MatchParticipants oldMatchParticipant: matchParticipantsRepository.findByGroupId(group.getId())) {
+            for (MatchParticipants oldMatchParticipant: repository.findByGroupId(group.getId())) {
                 //If the match has not occurred yet
                 if(oldMatchParticipant.getRegisteredTime() == null)
                     return null;
@@ -270,7 +267,8 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
                 awayStack.add(1, homeStack.remove(0));
             }
         }
-        matchParticipantsRepository.saveAll(matches);
+        if (oddParticipants) group.getGroupParticipants().remove(size - 1);
+        repository.saveAll(matches);
     }
 
     private MatchParticipants createMatch(Tournament tournament, Group group, GroupParticipant away, GroupParticipant home, int round, PlayoffStage playoffStage) {

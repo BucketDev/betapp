@@ -5,12 +5,14 @@ import com.bucketdev.betapp.dto.TournamentDTO;
 import com.bucketdev.betapp.dto.UserDTO;
 import com.bucketdev.betapp.exception.group.GroupsNotFoundException;
 import com.bucketdev.betapp.exception.groupParticipant.GroupParticipantsNotSufficient;
+import com.bucketdev.betapp.exception.groupTeams.GroupTeamsNotSufficient;
 import com.bucketdev.betapp.exception.tournament.TournamentNotFoundException;
 import com.bucketdev.betapp.exception.tournament.TournamentWrongStageException;
 import com.bucketdev.betapp.exception.tournamentSettings.TournamentSettingsNotFoundException;
 import com.bucketdev.betapp.exception.user.UserNotFoundException;
 import com.bucketdev.betapp.repository.*;
 import com.bucketdev.betapp.service.MatchParticipantsService;
+import com.bucketdev.betapp.service.MatchTeamsService;
 import com.bucketdev.betapp.service.TournamentService;
 import com.bucketdev.betapp.service.TournamentSettingsService;
 import com.bucketdev.betapp.type.PlayoffStage;
@@ -48,6 +50,9 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Autowired
     private MatchParticipantsService matchParticipantsService;
+
+    @Autowired
+    private MatchTeamsService matchTeamsService;
 
     @Autowired
     private TournamentSettingsService tournamentSettingsService;
@@ -140,10 +145,12 @@ public class TournamentServiceImpl implements TournamentService {
         if (tournamentSettings == null)
             throw new TournamentSettingsNotFoundException("tournament uid: " + dto.getUid());
         if (tournament.isTournamentTeams()) {
-            // TODO create matches based on teams
+            if (dto.getTournamentStage().equals(TournamentStage.GROUP_STAGE)) {
+                groupStageTeamMatches(tournament, tournamentSettings.isGroupRoundTrip());
+            }
         } else {
             if (dto.getTournamentStage().equals(TournamentStage.GROUP_STAGE)) {
-                groupsStageMatches(tournament, tournamentSettings.isGroupRoundTrip());
+                groupStageParticipantMatches(tournament, tournamentSettings.isGroupRoundTrip());
             } else if (dto.getTournamentStage().equals(TournamentStage.FINALS_STAGE)){
                 assignPlayoffGroup(tournamentSettings, tournament.getUid());
                 PlayoffStage playoffStage = tournamentSettings.getPlayoffStage();
@@ -226,7 +233,7 @@ public class TournamentServiceImpl implements TournamentService {
         groupParticipantRepository.saveAll(newFinalists);
     }
 
-    private void groupsStageMatches(Tournament tournament, boolean roundTrip) {
+    private void groupStageParticipantMatches(Tournament tournament, boolean roundTrip) {
         List<Group> groups = groupRepository.findAllByTournamentUid(tournament.getUid());
         if (groups == null || groups.size() == 0)
             throw new GroupsNotFoundException("tournamentUid: " + tournament.getUid());
@@ -234,6 +241,17 @@ public class TournamentServiceImpl implements TournamentService {
             if (group.getGroupParticipants().size() < 2)
                 throw new GroupParticipantsNotSufficient("groupId: " + group.getId());
             matchParticipantsService.calculateMatches(group, roundTrip, null);
+        }
+    }
+
+    private void groupStageTeamMatches(Tournament tournament, boolean roundTrip) {
+        List<Group> groups = groupRepository.findAllByTournamentUid(tournament.getUid());
+        if (groups == null || groups.size() == 0)
+            throw new GroupsNotFoundException("tournamentUid: " + tournament.getUid());
+        for (Group group : groups) {
+            if (group.getGroupTeams().size() < 2)
+                throw new GroupTeamsNotSufficient("groupId: " + group.getId());
+            matchTeamsService.calculateMatches(group, roundTrip, null);
         }
     }
 
