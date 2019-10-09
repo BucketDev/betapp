@@ -21,6 +21,18 @@ import java.util.stream.Collectors;
 @Service
 public class MatchResultServiceImpl implements MatchResultService {
 
+    enum MatchResultType {
+        AWAY_LOSE(-1),
+        TIE(0),
+        AWAY_WIN(1);
+
+        private int value;
+
+        MatchResultType(int value) {
+            this.value = value;
+        }
+    }
+
     @Autowired
     private MatchResultsRepository repository;
 
@@ -93,5 +105,28 @@ public class MatchResultServiceImpl implements MatchResultService {
                                 participantResultsDTO.getMatchResult() == null ? null : participantResultsDTO.getMatchResult().getCreationTime(),
                         Comparator.nullsLast(Comparator.naturalOrder())))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    @Override
+    public void calculateBetPoints(MatchTeams matchTeams) {
+        Set<MatchResult> matchResults = repository.findAllByMatchTeamsId(matchTeams.getId());
+        matchResults.forEach(matchResult -> {
+            int points = 0;
+            if (matchResult.getScoreAway() == matchTeams.getScoreAway() && matchResult.getScoreHome() == matchTeams.getScoreHome())
+                points += 2;
+            if (getMatchTypeResult(matchResult.getScoreAway(), matchResult.getScoreHome())
+                    .equals(getMatchTypeResult(matchTeams.getScoreAway(), matchTeams.getScoreHome())))
+                points += 1;
+            matchResult.setPoints(points);
+        });
+        repository.saveAll(matchResults);
+    }
+
+    private MatchResultType getMatchTypeResult(int awayScore, int homeScore) {
+        if (awayScore > homeScore)
+            return MatchResultType.AWAY_WIN;
+        else if (awayScore < homeScore)
+            return MatchResultType.AWAY_LOSE;
+        return MatchResultType.TIE;
     }
 }

@@ -5,6 +5,7 @@ import com.bucketdev.betapp.dto.MatchResultDTO;
 import com.bucketdev.betapp.dto.MatchTeamsDTO;
 import com.bucketdev.betapp.exception.matchTeams.MatchTeamsNotFoundException;
 import com.bucketdev.betapp.repository.*;
+import com.bucketdev.betapp.service.MatchResultService;
 import com.bucketdev.betapp.service.MatchTeamsService;
 import com.bucketdev.betapp.type.PlayoffStage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class MatchTeamsServiceImpl implements MatchTeamsService {
 
     @Autowired
     private MatchResultsRepository matchResultsRepository;
+
+    @Autowired
+    private MatchResultService matchResultService;
 
     @Override
     public Map<Integer, List<MatchTeamsDTO>> findAllByTournamentId(long tournamentId, String userUid) {
@@ -85,10 +89,20 @@ public class MatchTeamsServiceImpl implements MatchTeamsService {
             else {
                 calculateNextPlayoffGroup(matchTeams);
             }
+            matchResultService.calculateBetPoints(matchTeams);
         }
         matchTeams.setScheduledTime(dto.getScheduledTime());
+        MatchTeamsDTO matchTeamsDB = repository.save(matchTeams).toDTO();
 
-        return repository.save(matchTeams).toDTO();
+        //Get the result for the updating user, by default is the creator of the tournament
+        MatchResultDTO matchResultDTO = null;
+        MatchResult matchResult = matchResultsRepository.findByMatchTeamsIdAndUserUid(
+                matchTeams.getId(), matchTeams.getTournament().getUserCreation().getUid());
+        if (matchResult != null)
+            matchResultDTO = matchResult.toDTO();
+        matchTeamsDB.setMatchResult(matchResultDTO);
+
+        return matchTeamsDB;
     }
 
     private void calculatePoints(MatchTeams matchTeams) {
