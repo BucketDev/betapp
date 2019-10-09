@@ -4,12 +4,12 @@ spring:
   application:
     name: betapp
   datasource:
-    url: jdbc:mysql://localhost:3306/betapp?useLegacyDatetimeCode=false&autoReconnect=true
-    #url: jdbc:mysql://bucketdev.site:3306/betapp-bucketdev?useLegacyDatetimeCode=false&autoReconnect=true
-    username: root
-    #username: betapp
-    password: root
-    #password: cwf9yddkti99
+    #url: jdbc:mysql://localhost:3306/betapp?useLegacyDatetimeCode=false&autoReconnect=true
+    url: jdbc:mysql://bucketdev.site:3306/betapp-bucketdev?useLegacyDatetimeCode=false&autoReconnect=true
+    #username: root
+    username: betapp
+    #password: root
+    password: cwf9yddkti99
   jpa:
     properties:
       hibernate:
