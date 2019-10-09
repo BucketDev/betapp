@@ -258,8 +258,7 @@ public class MatchParticipantsServiceImpl implements MatchParticipantsService {
                         createMatch(tournament, group, awayStack.get(i), homeStack.get(i), round, playoffStage));
                     if (roundTrip)
                         matches.add(
-                            createMatch(tournament, group, homeStack.get(i), awayStack.get(i),
-                                oddParticipants ? round + size : round + size -1, playoffStage));
+                            createMatch(tournament, group, homeStack.get(i), awayStack.get(i), round + size -1, playoffStage));
                 }
             }
             if (size > 2) {

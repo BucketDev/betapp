@@ -21,7 +21,7 @@ public class MatchResultDTO implements Serializable {
     private int scoreAway;
     private int scoreHome;
     private int points;
-    @JsonFormat(timezone = "GMT-06:00")
+    @JsonFormat(timezone = "GMT-06:00", pattern = "yyyy-MM-dd HH:mm:ss.SSSZ")
     private Calendar creationTime;
 
 }

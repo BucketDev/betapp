@@ -259,8 +259,7 @@ public class MatchTeamsServiceImpl implements MatchTeamsService {
                 if(awayStack.get(i).getId() > 0 && homeStack.get(i).getId() > 0) {
                     matches.add( createMatch(tournament, group, awayStack.get(i), homeStack.get(i), round, playoffStage));
                     if (roundTrip)
-                        matches.add( createMatch(tournament, group, homeStack.get(i), awayStack.get(i),
-                                oddTeams ? round + size : round + size -1, playoffStage));
+                        matches.add( createMatch(tournament, group, homeStack.get(i), awayStack.get(i), round + size -1, playoffStage));
                 }
             }
             if (size > 2) {

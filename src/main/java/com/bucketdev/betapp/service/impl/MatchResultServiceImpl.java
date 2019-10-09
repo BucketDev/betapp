@@ -12,10 +12,7 @@ import com.bucketdev.betapp.service.MatchResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -49,7 +46,7 @@ public class MatchResultServiceImpl implements MatchResultService {
             matchResult = optionalMatchResult.get();
         } else {
             Optional<User> optionalUser = userRepository.findById(dto.getUserId());
-            if(!optionalUser.isPresent())
+            if (!optionalUser.isPresent())
                 throw new UserNotFoundException("id: " + dto.getUserId());
             User user = optionalUser.get();
             Optional<Tournament> optionalTournament = tournamentRepository.findById(dto.getTournamentId());
@@ -91,7 +88,10 @@ public class MatchResultServiceImpl implements MatchResultService {
                     .findFirst().ifPresent(matchResult -> dto.setMatchResult(matchResult.toDTO()));
             participantResults.add(dto);
         });
-
-        return participantResults;
+        return participantResults.stream()
+                .sorted(Comparator.comparing(participantResultsDTO ->
+                                participantResultsDTO.getMatchResult() == null ? null : participantResultsDTO.getMatchResult().getCreationTime(),
+                        Comparator.nullsLast(Comparator.naturalOrder())))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }
