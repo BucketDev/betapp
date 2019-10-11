@@ -18,6 +18,7 @@ public class MatchTeamsDTO implements Serializable {
 
     private long id;
     private long tournamentId;
+    private char groupName;
     private GroupTeamDTO groupTeamAway;
     private Integer scoreAway;
     private GroupTeamDTO groupTeamHome;

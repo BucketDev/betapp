@@ -16,4 +16,4 @@ spring:
         show_sql: false
         format_sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none

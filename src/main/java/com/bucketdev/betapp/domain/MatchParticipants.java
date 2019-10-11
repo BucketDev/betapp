@@ -76,6 +76,7 @@ public class MatchParticipants {
         dto.setScoreAway(scoreAway);
         if (groupParticipantHome != null)
             dto.setGroupParticipantHome(groupParticipantHome.toDTO());
+        dto.setGroupName(group.getName());
         dto.setScoreHome(scoreHome);
         dto.setScheduledTime(scheduledTime);
         dto.setRegisteredTime(registeredTime);

@@ -1,12 +1,15 @@
 package com.bucketdev.betapp.domain;
 
+import com.bucketdev.betapp.domain.leaderboard.Leaderboard;
 import com.bucketdev.betapp.dto.TournamentDetailsDTO;
+import com.bucketdev.betapp.type.TournamentStage;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,6 +53,10 @@ public class TournamentDetails {
     @ManyToOne
     private User userCreation;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private TournamentStage tournamentStage;
+
     @ManyToMany
     @JoinTable(name = "participants",
             joinColumns = @JoinColumn(name = "tournament_id"),
@@ -77,6 +84,7 @@ public class TournamentDetails {
         dto.setTournamentTeams(tournamentTeams);
         dto.setCreationDate(creationDate);
         dto.setUserCreationId(userCreation.getId());
+        dto.setTournamentStage(tournamentStage);
         dto.setParticipants(participants.stream().map(User::toDTO).collect(Collectors.toSet()));
         if(poolSettings != null)
             dto.setPoolSettings(poolSettings.toDTO());

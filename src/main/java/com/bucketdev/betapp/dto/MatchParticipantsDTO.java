@@ -17,6 +17,7 @@ public class MatchParticipantsDTO implements Serializable {
 
     private long id;
     private long tournamentId;
+    private char groupName;
     private GroupParticipantDTO groupParticipantAway;
     private Integer scoreAway;
     private GroupParticipantDTO groupParticipantHome;

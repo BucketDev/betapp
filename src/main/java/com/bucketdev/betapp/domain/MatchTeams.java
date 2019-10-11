@@ -78,6 +78,7 @@ public class MatchTeams {
         dto.setScoreAway(scoreAway);
         if (groupTeamHome != null)
             dto.setGroupTeamHome(groupTeamHome.toDTO());
+        dto.setGroupName(group.getName());
         dto.setScoreHome(scoreHome);
         dto.setScheduledTime(scheduledTime);
         dto.setRegisteredTime(registeredTime);
