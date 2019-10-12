@@ -1,5 +1,11 @@
 package com.bucketdev.betapp.exception;
 
+import com.bucketdev.betapp.exception.group.GroupParticipantsNotSufficient;
+import com.bucketdev.betapp.exception.group.GroupTeamsNotSufficient;
+import com.bucketdev.betapp.exception.match.MatchParticipantsNotFoundException;
+import com.bucketdev.betapp.exception.match.MatchResultNotFoundException;
+import com.bucketdev.betapp.exception.match.MatchTeamsNotFoundException;
+import com.bucketdev.betapp.exception.tournament.TournamentSettingsNotFoundException;
 import com.bucketdev.betapp.exception.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +29,49 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public final ResponseEntity<Object> handleBedNotFoundException(Exception ex, WebRequest request) throws Exception {
+    public final ResponseEntity<Object> handleUserNotFoundException(Exception ex, WebRequest request) throws Exception {
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TournamentSettingsNotFoundException.class)
+    public final ResponseEntity<Object> handleTournamentSettingsNotFoundException(Exception ex, WebRequest request) throws Exception {
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MatchParticipantsNotFoundException.class)
+    public final ResponseEntity<Object> handleMatchParticipantsNotFoundException(Exception ex, WebRequest request) throws Exception {
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MatchResultNotFoundException.class)
+    public final ResponseEntity<Object> handleMatchResultNotFoundException(Exception ex, WebRequest request) throws Exception {
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MatchTeamsNotFoundException.class)
+    public final ResponseEntity<Object> handleMatchTeamsNotFoundException(Exception ex, WebRequest request) throws Exception {
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(GroupParticipantsNotSufficient.class)
+    public final ResponseEntity<Object> handleGroupParticipantsNotSufficient(Exception ex, WebRequest request) throws Exception {
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(GroupTeamsNotSufficient.class)
+    public final ResponseEntity<Object> handleGroupTeamsNotSufficient(Exception ex, WebRequest request) throws Exception {
         ExceptionResponse exceptionResponse =
                 new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);

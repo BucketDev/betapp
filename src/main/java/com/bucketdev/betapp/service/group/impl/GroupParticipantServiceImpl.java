@@ -1,0 +1,71 @@
+package com.bucketdev.betapp.service.group.impl;
+
+import com.bucketdev.betapp.domain.group.Group;
+import com.bucketdev.betapp.domain.group.GroupParticipant;
+import com.bucketdev.betapp.domain.tournament.Tournament;
+import com.bucketdev.betapp.domain.user.User;
+import com.bucketdev.betapp.dto.group.GroupParticipantDTO;
+import com.bucketdev.betapp.exception.group.GroupNotFoundException;
+import com.bucketdev.betapp.exception.tournament.TournamentNotFoundException;
+import com.bucketdev.betapp.exception.user.UserNotFoundException;
+import com.bucketdev.betapp.repository.group.GroupParticipantRepository;
+import com.bucketdev.betapp.repository.group.GroupRepository;
+import com.bucketdev.betapp.repository.tournament.TournamentRepository;
+import com.bucketdev.betapp.repository.user.UserRepository;
+import com.bucketdev.betapp.service.group.GroupParticipantService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+/**
+ * @author rodrigo.loyola
+ */
+@Service
+public class GroupParticipantServiceImpl implements GroupParticipantService {
+
+    @Autowired
+    private GroupParticipantRepository repository;
+
+    @Autowired
+    private GroupRepository groupRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TournamentRepository tournamentRepository;
+
+    @Override
+    public GroupParticipantDTO save(GroupParticipantDTO groupParticipantDTO) {
+        Optional<Group> groupOptional = groupRepository.findById(groupParticipantDTO.getGroupId());
+        if (!groupOptional.isPresent())
+            throw new GroupNotFoundException("id: " + groupParticipantDTO.getGroupId());
+        Group group = groupOptional.get();
+        Optional<User> userOptional = userRepository.findById(groupParticipantDTO.getUser().getId());
+        if (!userOptional.isPresent())
+            throw new UserNotFoundException("id: " + groupParticipantDTO.getUser().getId());
+        User user = userOptional.get();
+        Optional<Tournament> tournamentOptional = tournamentRepository.findById(groupParticipantDTO.getTournamentId());
+        if (!tournamentOptional.isPresent())
+            throw new TournamentNotFoundException("id: " + groupParticipantDTO.getTournamentId());
+        Tournament tournament = tournamentOptional.get();
+
+        GroupParticipant groupParticipant = new GroupParticipant();
+        groupParticipant.setGroup(group);
+        groupParticipant.setTournament(tournament);
+        groupParticipant.setUser(user);
+        groupParticipant.setValuesFromDTO(groupParticipantDTO);
+
+        return repository.save(groupParticipant).toDTO();
+    }
+
+    @Override
+    public List<GroupParticipantDTO> findByTournamentId(long tournamentId) {
+        return repository.findAllByTournamentId(tournamentId).stream()
+                .map(GroupParticipant::toDTO).collect(Collectors.toList());
+    }
+
+}

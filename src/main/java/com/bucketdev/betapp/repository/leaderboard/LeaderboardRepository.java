@@ -15,4 +15,6 @@ public interface LeaderboardRepository extends JpaRepository<Leaderboard, Leader
 
     List<Leaderboard> findByLeaderboardKeyTournamentId(long tournamentId);
 
+    Leaderboard findFirstByLeaderboardKeyTournamentId(long tournamentId);
+
 }

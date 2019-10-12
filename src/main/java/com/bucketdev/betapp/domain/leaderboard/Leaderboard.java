@@ -1,6 +1,6 @@
 package com.bucketdev.betapp.domain.leaderboard;
 
-import com.bucketdev.betapp.domain.User;
+import com.bucketdev.betapp.domain.user.User;
 import com.bucketdev.betapp.dto.leaderboard.LeaderboardDTO;
 import lombok.Getter;
 import lombok.Setter;

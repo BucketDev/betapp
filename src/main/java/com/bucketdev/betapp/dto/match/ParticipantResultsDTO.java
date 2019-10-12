@@ -1,4 +1,4 @@
-package com.bucketdev.betapp.dto.leaderboard;
+package com.bucketdev.betapp.dto.match;
 
 import com.bucketdev.betapp.dto.user.UserDTO;
 import lombok.Getter;
@@ -11,9 +11,10 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-public class LeaderboardDTO implements Serializable {
+public class ParticipantResultsDTO implements Serializable {
 
+    private long id;
     private UserDTO user;
-    private long points;
+    private MatchResultDTO matchResult;
 
 }

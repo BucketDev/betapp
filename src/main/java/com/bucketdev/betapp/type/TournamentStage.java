@@ -6,6 +6,6 @@ package com.bucketdev.betapp.type;
 public enum TournamentStage {
     NEW_TOURNAMENT,
     GROUP_STAGE,
-    FINALS_STAGE,
+    PLAYOFF_STAGE,
     FINISHED_TOURNAMENT
 }
