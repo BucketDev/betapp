@@ -10,14 +10,13 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-public class UserDTO implements Serializable {
+public class UserFollowerCountDTO implements Serializable {
 
     private long id;
     private String uid;
-    private String email;
     private String displayName;
-    private String description;
     private String photoUrl;
-    private String provider;
+    private int following;
+    private int followers;
 
 }

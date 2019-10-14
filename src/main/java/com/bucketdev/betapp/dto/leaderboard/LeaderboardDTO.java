@@ -14,6 +14,6 @@ import java.io.Serializable;
 public class LeaderboardDTO implements Serializable {
 
     private UserDTO user;
-    private long points;
+    private int points;
 
 }

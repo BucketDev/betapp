@@ -32,6 +32,9 @@ public class User {
     private String displayName;
 
     @Column
+    private String description;
+
+    @Column
     private String photoUrl;
 
     @Column
@@ -45,6 +48,7 @@ public class User {
         dto.setUid(uid);
         dto.setEmail(email);
         dto.setDisplayName(displayName);
+        dto.setDescription(description);
         dto.setPhotoUrl(photoUrl);
         dto.setProvider(provider);
 
@@ -55,6 +59,7 @@ public class User {
         uid = dto.getUid();
         email = dto.getEmail();
         displayName = dto.getDisplayName();
+        description = dto.getDescription();
         photoUrl = dto.getPhotoUrl();
         provider = dto.getProvider();
     }

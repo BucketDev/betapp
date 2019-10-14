@@ -80,7 +80,6 @@ public class MatchTeamsServiceImpl implements MatchTeamsService {
         Map<PlayoffStage, List<MatchTeamsDTO>> rounds = new TreeMap<>(Comparator.comparingInt(PlayoffStage::getOrder));
         repository.findAllByTournamentIdAndPlayoffStageNotNull(tournamentId)
                 .forEach(matchTeams -> {
-                    System.out.println(matchTeams.getGroup().getId());
                     PlayoffStage playoffStage = matchTeams.getPlayoffStage();
                     List<MatchTeamsDTO> matches = rounds.get(playoffStage);
 
