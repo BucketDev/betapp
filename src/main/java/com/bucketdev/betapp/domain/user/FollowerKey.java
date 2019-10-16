@@ -1,6 +1,7 @@
 package com.bucketdev.betapp.domain.user;
 
 import lombok.Data;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -16,6 +17,7 @@ public class FollowerKey implements Serializable {
     @Column(name = "user_following_id")
     private long userFollowingId;
 
+    @NaturalId
     @Column(name = "user_followed_id")
     private long userFollowedId;
 
