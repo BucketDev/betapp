@@ -1,5 +1,6 @@
 package com.bucketdev.betapp.domain.user;
 
+import com.bucketdev.betapp.dto.user.UserDetailsDTO;
 import com.bucketdev.betapp.dto.user.UserFollowerCountDTO;
 import com.bucketdev.betapp.dto.user.UserFollowerDTO;
 import lombok.Getter;
@@ -73,6 +74,21 @@ public class UserFollower {
         dto.setPhotoUrl(photoUrl);
         dto.setFollowing(following.size());
         dto.setFollowers(followers.size());
+
+        return dto;
+    }
+
+    public UserDetailsDTO toDetailsDTO(String followingUid) {
+        UserDetailsDTO dto = new UserDetailsDTO();
+
+        dto.setId(id);
+        dto.setUid(uid);
+        dto.setDisplayName(displayName);
+        dto.setDescription(description);
+        dto.setPhotoUrl(photoUrl);
+        dto.setFollowing(followers.stream().anyMatch(user -> user.getUid().equals(followingUid)));
+        dto.setFollowingCount(following.size());
+        dto.setFollowersCount(followers.size());
 
         return dto;
     }

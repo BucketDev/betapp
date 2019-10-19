@@ -3,6 +3,7 @@ package com.bucketdev.betapp.service.user.impl;
 import com.bucketdev.betapp.domain.user.User;
 import com.bucketdev.betapp.domain.user.UserFollower;
 import com.bucketdev.betapp.dto.user.UserDTO;
+import com.bucketdev.betapp.dto.user.UserDetailsDTO;
 import com.bucketdev.betapp.dto.user.UserFollowerCountDTO;
 import com.bucketdev.betapp.dto.user.UserFollowerDTO;
 import com.bucketdev.betapp.exception.user.UserNotFoundException;
@@ -38,6 +39,14 @@ public class UserFollowerServiceImpl implements UserFollowerService {
         if (userFollower == null)
             throw new UserNotFoundException("uid: " + uid);
         return userFollower.toCountDTO();
+    }
+
+    @Override
+    public UserDetailsDTO findDetailsByUid(String uid, String followingUid) {
+        UserFollower userFollower = repository.findByUid(uid);
+        if (userFollower == null)
+            throw new UserNotFoundException("uid: ", uid);
+        return userFollower.toDetailsDTO(followingUid);
     }
 
     @Override

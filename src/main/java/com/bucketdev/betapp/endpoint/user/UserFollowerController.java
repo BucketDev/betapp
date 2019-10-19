@@ -1,6 +1,7 @@
 package com.bucketdev.betapp.endpoint.user;
 
 import com.bucketdev.betapp.dto.user.UserDTO;
+import com.bucketdev.betapp.dto.user.UserDetailsDTO;
 import com.bucketdev.betapp.dto.user.UserFollowerCountDTO;
 import com.bucketdev.betapp.dto.user.UserFollowerDTO;
 import com.bucketdev.betapp.service.user.UserFollowerService;
@@ -27,6 +28,12 @@ public class UserFollowerController {
     @GetMapping("count/uid/{uid}")
     public ResponseEntity<UserFollowerCountDTO> findCountByUid(@PathVariable String uid) {
         return new ResponseEntity<>(service.findCountByUid(uid), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<UserDetailsDTO> findFollowingByUid(@RequestParam(value = "uid") String uid,
+                                                             @RequestParam(value = "followingUid") String followingUid) {
+        return new ResponseEntity<>(service.findDetailsByUid(uid, followingUid), HttpStatus.OK);
     }
 
     @PostMapping("from/{fromUid}/to/{toUid}")
