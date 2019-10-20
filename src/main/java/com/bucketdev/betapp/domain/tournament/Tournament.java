@@ -1,5 +1,6 @@
 package com.bucketdev.betapp.domain.tournament;
 
+import com.bucketdev.betapp.domain.NotificationDestiny;
 import com.bucketdev.betapp.domain.user.User;
 import com.bucketdev.betapp.dto.tournament.TournamentDTO;
 import com.bucketdev.betapp.type.TournamentPrivacy;
@@ -18,7 +19,7 @@ import java.util.Calendar;
 @Getter
 @Setter
 @Table(name = "tournaments")
-public class Tournament {
+public class Tournament implements NotificationDestiny {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -89,4 +90,18 @@ public class Tournament {
         tournamentTeams = dto.isTournamentTeams();
     }
 
+    @Override
+    public String getDestinyUid() {
+        return uid;
+    }
+
+    @Override
+    public String getDestinyName() {
+        return title;
+    }
+
+    @Override
+    public String getDestinyPhotoUrl() {
+        return photoUrl;
+    }
 }

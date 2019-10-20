@@ -1,9 +1,11 @@
 package com.bucketdev.betapp.domain.notification;
 
+import com.bucketdev.betapp.domain.NotificationDestiny;
 import com.bucketdev.betapp.domain.user.User;
 import com.bucketdev.betapp.dto.notification.NotificationDTO;
-import lombok.Getter;
-import lombok.Setter;
+import com.bucketdev.betapp.type.NotificationType;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,16 +16,25 @@ import java.util.Calendar;
  */
 @Entity
 @Table(name = "notifications")
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class Notification {
+
+    public Notification(@NotNull NotificationType notificationType, @NotNull User userOrigin, NotificationDestiny destiny) {
+        this.notificationType = notificationType;
+        this.userOrigin = userOrigin;
+        this.destinyUid = destiny.getDestinyUid();
+        this.destinyName = destiny.getDestinyName();
+        this.destinyPhotoUrl = destiny.getDestinyPhotoUrl();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "notification_type_id")
+    @Column
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private NotificationType notificationType;
 
     @ManyToOne
@@ -51,7 +62,7 @@ public class Notification {
         NotificationDTO dto = new NotificationDTO();
 
         dto.setId(id);
-        dto.setNotificationType(notificationType.toDTO());
+        dto.setNotificationType(notificationType);
         dto.setUserOrigin(userOrigin.toDTO());
         dto.setDestinyUid(destinyUid);
         dto.setDestinyName(destinyName);

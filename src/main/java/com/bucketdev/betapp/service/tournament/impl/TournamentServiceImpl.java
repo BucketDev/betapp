@@ -25,9 +25,12 @@ import com.bucketdev.betapp.repository.tournament.TournamentSettingsRepository;
 import com.bucketdev.betapp.repository.user.UserRepository;
 import com.bucketdev.betapp.service.match.MatchParticipantsService;
 import com.bucketdev.betapp.service.match.MatchTeamsService;
+import com.bucketdev.betapp.service.notification.NotificationService;
 import com.bucketdev.betapp.service.tournament.TournamentService;
 import com.bucketdev.betapp.service.tournament.TournamentSettingsService;
+import com.bucketdev.betapp.type.NotificationType;
 import com.bucketdev.betapp.type.PlayoffStage;
+import com.bucketdev.betapp.type.TournamentPrivacy;
 import com.bucketdev.betapp.type.TournamentStage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,6 +75,9 @@ public class TournamentServiceImpl implements TournamentService {
     @Autowired
     private TournamentSettingsService tournamentSettingsService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public TournamentDTO save(TournamentDTO dto) {
         Tournament tournament = new Tournament();
         if(dto.getId() > 0) {
@@ -88,6 +94,8 @@ public class TournamentServiceImpl implements TournamentService {
             tournament.setCreationDate(Calendar.getInstance());
             tournament.setUserCreation(optionalUser.get());
             tournament.setTournamentStage(TournamentStage.NEW_TOURNAMENT);
+            if (!tournament.getTournamentPrivacy().equals(TournamentPrivacy.SECRET))
+                notificationService.create(NotificationType.NEW_TOURNAMENT, optionalUser.get(), tournament);
         }
         tournament.setValuesFromDTO(dto);
         tournament = repository.save(tournament);
