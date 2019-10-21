@@ -7,11 +7,13 @@ import com.bucketdev.betapp.domain.match.Participant;
 import com.bucketdev.betapp.domain.tournament.Tournament;
 import com.bucketdev.betapp.domain.tournament.TournamentSettings;
 import com.bucketdev.betapp.domain.user.User;
+import com.bucketdev.betapp.dto.match.ParticipantDTO;
 import com.bucketdev.betapp.dto.tournament.TournamentDTO;
 import com.bucketdev.betapp.dto.user.UserDTO;
 import com.bucketdev.betapp.exception.group.GroupsNotFoundException;
 import com.bucketdev.betapp.exception.group.GroupParticipantsNotSufficient;
 import com.bucketdev.betapp.exception.group.GroupTeamsNotSufficient;
+import com.bucketdev.betapp.exception.tournament.ParticipantNotFoundException;
 import com.bucketdev.betapp.exception.tournament.TournamentNotFoundException;
 import com.bucketdev.betapp.exception.tournament.TournamentWrongStageException;
 import com.bucketdev.betapp.exception.tournament.TournamentSettingsNotFoundException;
@@ -94,7 +96,7 @@ public class TournamentServiceImpl implements TournamentService {
             tournament.setCreationDate(Calendar.getInstance());
             tournament.setUserCreation(optionalUser.get());
             tournament.setTournamentStage(TournamentStage.NEW_TOURNAMENT);
-            if (!tournament.getTournamentPrivacy().equals(TournamentPrivacy.SECRET))
+            if (!dto.getTournamentPrivacy().equals(TournamentPrivacy.SECRET))
                 notificationService.create(NotificationType.NEW_TOURNAMENT, optionalUser.get(), tournament);
         }
         tournament.setValuesFromDTO(dto);
@@ -367,5 +369,23 @@ public class TournamentServiceImpl implements TournamentService {
     public void deleteTournament(String uid) {
         Tournament tournament = repository.findByUid(uid);
         repository.delete(tournament);
+    }
+
+    @Override
+    @Transactional
+    public void deleteParticipants(long tournamentId, List<UserDTO> usersDTO) {
+        Optional<Tournament> optionalTournament = repository.findById(tournamentId);
+        if (!optionalTournament.isPresent())
+            throw new TournamentNotFoundException("id:", String.valueOf(tournamentId));
+
+        List<Participant> participants = new ArrayList<>();
+        usersDTO.stream().forEach(userDTO -> {
+            Participant participant = participantRepository.findByTournamentIdAndUserId(tournamentId, userDTO.getId());
+            if (participant == null)
+                throw new ParticipantNotFoundException(
+                        "tournamentId:", String.valueOf(tournamentId), "userId:", String.valueOf(userDTO.getId()));
+            participants.add(participant);
+        });
+        participantRepository.deleteAll(participants);
     }
 }

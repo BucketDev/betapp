@@ -1,6 +1,7 @@
 package com.bucketdev.betapp.endpoint.group;
 
 import com.bucketdev.betapp.dto.group.GroupParticipantDTO;
+import com.bucketdev.betapp.dto.user.UserDTO;
 import com.bucketdev.betapp.service.group.GroupParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,10 @@ public class GroupParticipantController {
     @Autowired
     private GroupParticipantService service;
 
-    @PostMapping
-    public ResponseEntity<GroupParticipantDTO> saveGroupParticipant(@RequestBody GroupParticipantDTO groupParticipant) {
-        return new ResponseEntity<>(service.save(groupParticipant), HttpStatus.CREATED);
+    @PostMapping("/group/{groupId}")
+    public ResponseEntity<List<GroupParticipantDTO>> saveGroupParticipant(@PathVariable long groupId,
+                                                                    @RequestBody List<UserDTO> users) {
+        return new ResponseEntity<>(service.saveByGroupId(groupId, users), HttpStatus.CREATED);
     }
 
     @GetMapping("/tournament/{tournamentId}")

@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author rodrigo.loyola
  */
@@ -23,9 +25,15 @@ public class TournamentController {
         return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}/participants")
-    public ResponseEntity<UserDTO> addParticipant(@PathVariable long id, @RequestBody UserDTO userDTO) {
-        return new ResponseEntity<>(service.addParticipant(id, userDTO), HttpStatus.CREATED);
+    @PostMapping("/{tournamentId}/participant")
+    public ResponseEntity<UserDTO> addParticipant(@PathVariable long tournamentId, @RequestBody UserDTO userDTO) {
+        return new ResponseEntity<>(service.addParticipant(tournamentId, userDTO), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{tournamentId}/participants")
+    public ResponseEntity deleteParticipants(@PathVariable long tournamentId, @RequestBody List<UserDTO> usersDTO) {
+        service.deleteParticipants(tournamentId, usersDTO);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}/photo")

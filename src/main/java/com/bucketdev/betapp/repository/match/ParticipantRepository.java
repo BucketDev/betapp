@@ -19,6 +19,8 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
             "AND p.tournament.id = gp.tournament.id WHERE p.tournament.id = :tournamentId AND gp.id IS NULL")
     List<Participant> pendingForGroupByTournament(@Param("tournamentId") long tournamentId);
 
+    Participant findByTournamentIdAndUserId(long tournamentId, long userId);
+
     Set<Participant> findAllByTournamentId(long tournamentId);
 
 }
