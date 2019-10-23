@@ -1,6 +1,8 @@
 package com.bucketdev.betapp.endpoint.notification;
 
+import com.bucketdev.betapp.dto.notification.NotificationCommentDTO;
 import com.bucketdev.betapp.dto.notification.NotificationUserDTO;
+import com.bucketdev.betapp.service.notification.NotificationCommentService;
 import com.bucketdev.betapp.service.notification.NotificationUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,6 +24,9 @@ public class NotificationUserController {
 
     @Autowired
     private NotificationUserService service;
+
+    @Autowired
+    private NotificationCommentService notificationCommentService;
 
     @GetMapping("/uid/{uid}")
     public ResponseEntity<Set<NotificationUserDTO>> findByUid(@PathVariable String uid) {

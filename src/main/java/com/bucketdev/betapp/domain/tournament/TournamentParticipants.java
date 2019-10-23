@@ -37,6 +37,7 @@ public class TournamentParticipants {
 
     @NotNull
     @Column
+    @Temporal(TemporalType.DATE)
     private Date creationDate;
 
     @NotNull

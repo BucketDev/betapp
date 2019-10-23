@@ -1,6 +1,17 @@
 server:
   port: 8080
 spring:
+  mail:
+    host: a2plcpnl0125.prod.iad2.secureserver.net
+    port: 465
+    username: hello@bucketdev.site
+    password: aqWR5czbMObE
+    protocol: smtps
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: a2plcpnl0125.prod.iad2.secureserver.net
   application:
     name: betapp
   datasource:
