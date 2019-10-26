@@ -48,10 +48,25 @@ public class TournamentSettingsServiceImpl implements TournamentSettingsService 
         TournamentSettings tournamentSettings = repository.findByTournamentUid(tournament.getUid());
         if (tournamentSettings == null) {
             tournamentSettings = new TournamentSettings();
+            tournamentSettings.setTournament(tournament);
+        } else {
+            if (dto.getGroupNumber() != tournamentSettings.getGroupNumber() ||
+                    !tournamentSettings.getPlayoffStage().equals(dto.getPlayoffStage())) {
+
+                tournamentSettings.setGroupNumber(dto.getGroupNumber());
+                tournamentSettings.setPlayoffStage(dto.getPlayoffStage());
+
+                generateNewGroups(tournamentSettings);
+                generateFinalsGroups(tournamentSettings);
+            }
         }
-        tournamentSettings.setTournament(tournament);
         tournamentSettings.setValuesFromDTO(dto);
 
+        return repository.save(tournamentSettings).toDTO();
+    }
+
+    private void generateNewGroups(TournamentSettings tournamentSettings) {
+        Tournament tournament = tournamentSettings.getTournament();
         groupRepository.deleteByTournamentUid(tournament.getUid());
         int groupName = 65;
 
@@ -62,9 +77,7 @@ public class TournamentSettingsServiceImpl implements TournamentSettingsService 
                 groupRepository.save(group);
             }
         }
-        generateFinalsGroups(tournamentSettings);
 
-        return repository.save(tournamentSettings).toDTO();
     }
 
     @Override

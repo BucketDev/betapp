@@ -80,6 +80,8 @@ public class TournamentServiceImpl implements TournamentService {
     @Autowired
     private NotificationService notificationService;
 
+    @Override
+    @Transactional
     public TournamentDTO save(TournamentDTO dto) {
         Tournament tournament = new Tournament();
         if(dto.getId() > 0) {
@@ -113,6 +115,8 @@ public class TournamentServiceImpl implements TournamentService {
             //create the default tournament settings
             TournamentSettings tournamentSettings = new TournamentSettings();
             tournamentSettings.setTournament(tournament);
+            //Generate the default playoff group (finals)
+            tournamentSettingsService.generateFinalsGroups(tournamentSettings);
             tournamentSettingsRepository.save(tournamentSettings);
 
             if (dto.isTournamentGroups()) {
@@ -379,7 +383,7 @@ public class TournamentServiceImpl implements TournamentService {
             throw new TournamentNotFoundException("id:", String.valueOf(tournamentId));
 
         List<Participant> participants = new ArrayList<>();
-        usersDTO.stream().forEach(userDTO -> {
+        usersDTO.forEach(userDTO -> {
             Participant participant = participantRepository.findByTournamentIdAndUserId(tournamentId, userDTO.getId());
             if (participant == null)
                 throw new ParticipantNotFoundException(

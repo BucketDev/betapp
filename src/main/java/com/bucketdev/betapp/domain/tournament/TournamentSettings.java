@@ -21,8 +21,8 @@ public class TournamentSettings {
 
     public TournamentSettings() {
         this.groupNumber = 1;
-        this.first = 1;
-        this.playoffStage = PlayoffStage.EIGHTH_FINALS;
+        this.first = 2;
+        this.playoffStage = PlayoffStage.FINALS;
     }
 
     @Id
