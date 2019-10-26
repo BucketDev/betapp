@@ -16,5 +16,7 @@ public class NotificationUserDTO implements Serializable {
 
     private UserDTO user;
     private NotificationDTO notification;
+    private int likes;
+    private boolean liked;
 
 }

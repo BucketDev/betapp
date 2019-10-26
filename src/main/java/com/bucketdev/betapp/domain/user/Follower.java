@@ -1,5 +1,6 @@
 package com.bucketdev.betapp.domain.user;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,8 +12,7 @@ import java.util.Calendar;
  */
 @Entity
 @Table(name = "followers")
-@Getter
-@Setter
+@Data
 public class Follower {
 
     @EmbeddedId
