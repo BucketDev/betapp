@@ -40,7 +40,7 @@ public class GroupTeamServiceImpl implements GroupTeamService {
         team.setTournament(group.getTournament());
         team = teamRepository.save(team);
 
-        GroupTeam groupTeam = new GroupTeam( group, team, 0);
+        GroupTeam groupTeam = new GroupTeam( group, team, groupTeamDTO.getPoints());
 
         return repository.save(groupTeam).toDTO();
     }

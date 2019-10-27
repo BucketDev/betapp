@@ -40,6 +40,8 @@ public class NotificationUser {
 
         dto.setUser(user.toDTO());
         dto.setNotification(notification.toDTO());
+        dto.setLikes(notification.getUserLikes().size());
+        dto.setLiked(notification.getUserLikes().stream().anyMatch(user -> user.getId() == userFollowingId));
 
         return dto;
     }

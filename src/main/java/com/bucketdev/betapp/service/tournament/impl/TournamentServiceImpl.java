@@ -115,9 +115,6 @@ public class TournamentServiceImpl implements TournamentService {
             //create the default tournament settings
             TournamentSettings tournamentSettings = new TournamentSettings();
             tournamentSettings.setTournament(tournament);
-            //Generate the default playoff group (finals)
-            tournamentSettingsService.generateFinalsGroups(tournamentSettings);
-            tournamentSettingsRepository.save(tournamentSettings);
 
             if (dto.isTournamentGroups()) {
                 //Create first default group
@@ -125,6 +122,10 @@ public class TournamentServiceImpl implements TournamentService {
                 group.setTournament(tournament);
                 groupRepository.save(group);
             }
+
+            //Generate the default playoff group (finals)
+            tournamentSettingsService.generateFinalsGroups(tournamentSettings);
+            tournamentSettingsRepository.save(tournamentSettings);
         }
 
         return tournament.toDTO();
@@ -178,7 +179,8 @@ public class TournamentServiceImpl implements TournamentService {
             if (newTournamentStage.equals(TournamentStage.GROUP_STAGE)) {
                 groupStageTeamMatches(tournament, tournamentSettings.isGroupRoundTrip());
             } else if (newTournamentStage.equals(TournamentStage.PLAYOFF_STAGE)) {
-                assignPlayoffTeams(tournamentSettings, tournament.getUid());
+                if (tournament.isTournamentGroups())
+                    assignPlayoffTeams(tournamentSettings, tournament.getUid());
                 PlayoffStage playoffStage = tournamentSettings.getPlayoffStage();
                 switch (playoffStage) {
                     case EIGHTH_FINALS:
@@ -199,7 +201,8 @@ public class TournamentServiceImpl implements TournamentService {
             if (newTournamentStage.equals(TournamentStage.GROUP_STAGE)) {
                 groupStageParticipantMatches(tournament, tournamentSettings.isGroupRoundTrip());
             } else if (newTournamentStage.equals(TournamentStage.PLAYOFF_STAGE)){
-                assignPlayoffParticipants(tournamentSettings, tournament.getUid());
+                if (tournament.isTournamentGroups())
+                    assignPlayoffParticipants(tournamentSettings, tournament.getUid());
                 PlayoffStage playoffStage = tournamentSettings.getPlayoffStage();
                 switch (playoffStage) {
                     case EIGHTH_FINALS:
@@ -347,7 +350,7 @@ public class TournamentServiceImpl implements TournamentService {
                                 groupA.getGroupTeams().get(idxFirstPlace).getTeam(), 0));
                 newFinalists.add(
                         new GroupTeam(finalGroup,
-                                groupB.getGroupTeams().get(idxLastPlace).getTeam(), 0));
+                                groupB.getGroupTeams().get(idxLastPlace).getTeam(), 1));
                 idxPlayoffGroup++;
                 idxFirstPlace++;
                 idxLastPlace--;

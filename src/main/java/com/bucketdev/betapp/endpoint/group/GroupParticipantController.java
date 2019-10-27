@@ -20,8 +20,13 @@ public class GroupParticipantController {
     @Autowired
     private GroupParticipantService service;
 
+    @PostMapping
+    public ResponseEntity<GroupParticipantDTO> insert(@RequestBody GroupParticipantDTO dto) {
+        return new ResponseEntity<>(service.insert(dto), HttpStatus.CREATED);
+    }
+
     @PostMapping("/group/{groupId}")
-    public ResponseEntity<List<GroupParticipantDTO>> saveGroupParticipant(@PathVariable long groupId,
+    public ResponseEntity<List<GroupParticipantDTO>> saveByGroupId(@PathVariable long groupId,
                                                                     @RequestBody List<UserDTO> users) {
         return new ResponseEntity<>(service.saveByGroupId(groupId, users), HttpStatus.CREATED);
     }

@@ -39,7 +39,7 @@ public class GroupParticipantServiceImpl implements GroupParticipantService {
     private UserRepository userRepository;
 
     @Override
-    public GroupParticipantDTO save(GroupParticipantDTO groupParticipantDTO) {
+    public GroupParticipantDTO insert(GroupParticipantDTO groupParticipantDTO) {
         Optional<Group> groupOptional = groupRepository.findById(groupParticipantDTO.getGroupId());
         if (!groupOptional.isPresent())
             throw new GroupNotFoundException("id: " + groupParticipantDTO.getGroupId());
@@ -49,7 +49,7 @@ public class GroupParticipantServiceImpl implements GroupParticipantService {
             throw new UserNotFoundException("id: " + groupParticipantDTO.getUser().getId());
         User user = userOptional.get();
 
-        GroupParticipant groupParticipant = new GroupParticipant(group, user, 0);
+        GroupParticipant groupParticipant = new GroupParticipant(group, user, groupParticipantDTO.getPoints());
 
         return repository.save(groupParticipant).toDTO();
     }

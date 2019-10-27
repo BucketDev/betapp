@@ -27,23 +27,12 @@ public class NotificationUserServiceImpl implements NotificationUserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private NotificationLikesRepository notificationLikesRepository;
-
     @Override
     public Set<NotificationUserDTO> findByFollowingUserUid(String uid) {
         User user = userRepository.findByUid(uid);
         if (user == null)
             throw new UserNotFoundException("uid", uid);
         return repository.findAllByUserFollowingId(user.getId())
-                .stream().map(notificationUser -> {
-                    NotificationUserDTO dto = notificationUser.toDTO();
-                    Set<NotificationLikes> notificationLikes =
-                            notificationLikesRepository.findAllByNotificationId(notificationUser.getNotification().getId());
-                    dto.setLikes(notificationLikes.size());
-                    dto.setLiked(notificationLikes.stream()
-                            .anyMatch(data -> data.getNotificationLikesKey().getUserId() == notificationUser.getUserFollowingId()));
-                    return dto;
-                }).collect(Collectors.toSet());
+                .stream().map(NotificationUser::toDTO).collect(Collectors.toSet());
     }
 }

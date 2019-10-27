@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface GroupParticipantService {
 
-    GroupParticipantDTO save(GroupParticipantDTO groupParticipantDTO);
+    GroupParticipantDTO insert(GroupParticipantDTO groupParticipantDTO);
     List<GroupParticipantDTO> saveByGroupId(long groupId, List<UserDTO> users);
     List<GroupParticipantDTO> findByTournamentId(long tournamentId);
 

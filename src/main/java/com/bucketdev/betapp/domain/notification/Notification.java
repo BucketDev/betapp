@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Calendar;
+import java.util.Set;
 
 /**
  * @author rodrigo.loyola
@@ -53,6 +54,13 @@ public class Notification {
     @Column
     @NotNull
     private String destinyPhotoUrl;
+
+    @ManyToMany
+    @JoinTable(name = "notification_likes",
+            joinColumns = @JoinColumn(name = "notification_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> userLikes;
 
     @Column
     @Temporal(value = TemporalType.TIMESTAMP)
