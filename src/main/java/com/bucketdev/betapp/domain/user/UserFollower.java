@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -42,14 +42,14 @@ public class UserFollower {
             joinColumns = @JoinColumn(name = "user_following_id"),
             inverseJoinColumns = @JoinColumn(name = "user_followed_id")
     )
-    private Set<User> following;
+    private List<User> following;
 
     @ManyToMany
     @JoinTable(name = "followers",
             joinColumns = @JoinColumn(name = "user_followed_id"),
             inverseJoinColumns = @JoinColumn(name = "user_following_id")
     )
-    private Set<User> followers;
+    private List<User> followers;
 
     public UserFollowerDTO toDTO() {
         UserFollowerDTO dto = new UserFollowerDTO();
@@ -59,8 +59,8 @@ public class UserFollower {
         dto.setDisplayName(displayName);
         dto.setDescription(description);
         dto.setPhotoUrl(photoUrl);
-        dto.setFollowing(following.stream().map(User::toDTO).collect(Collectors.toSet()));
-        dto.setFollowers(followers.stream().map(User::toDTO).collect(Collectors.toSet()));
+        dto.setFollowing(following.stream().map(User::toDTO).collect(Collectors.toList()));
+        dto.setFollowers(followers.stream().map(User::toDTO).collect(Collectors.toList()));
 
         return dto;
     }

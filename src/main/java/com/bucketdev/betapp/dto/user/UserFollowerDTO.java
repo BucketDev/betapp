@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author rodrigo.loyola
@@ -18,7 +18,7 @@ public class UserFollowerDTO implements Serializable {
     private String displayName;
     private String description;
     private String photoUrl;
-    private Set<UserDTO> following;
-    private Set<UserDTO> followers;
+    private List<UserDTO> following;
+    private List<UserDTO> followers;
 
 }
