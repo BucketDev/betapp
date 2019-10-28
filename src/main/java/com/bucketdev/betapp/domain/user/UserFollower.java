@@ -42,14 +42,14 @@ public class UserFollower {
             joinColumns = @JoinColumn(name = "user_following_id"),
             inverseJoinColumns = @JoinColumn(name = "user_followed_id")
     )
-    private List<User> following;
+    private List<SubUserFollower> following;
 
     @ManyToMany
     @JoinTable(name = "followers",
             joinColumns = @JoinColumn(name = "user_followed_id"),
             inverseJoinColumns = @JoinColumn(name = "user_following_id")
     )
-    private List<User> followers;
+    private List<SubUserFollower> followers;
 
     public UserFollowerDTO toDTO() {
         UserFollowerDTO dto = new UserFollowerDTO();
@@ -59,8 +59,8 @@ public class UserFollower {
         dto.setDisplayName(displayName);
         dto.setDescription(description);
         dto.setPhotoUrl(photoUrl);
-        dto.setFollowing(following.stream().map(User::toDTO).collect(Collectors.toList()));
-        dto.setFollowers(followers.stream().map(User::toDTO).collect(Collectors.toList()));
+        dto.setFollowing(following.stream().map(SubUserFollower::toDTO).collect(Collectors.toList()));
+        dto.setFollowers(followers.stream().map(SubUserFollower::toDTO).collect(Collectors.toList()));
 
         return dto;
     }

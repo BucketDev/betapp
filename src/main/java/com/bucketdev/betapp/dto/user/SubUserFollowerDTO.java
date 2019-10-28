@@ -1,24 +1,21 @@
 package com.bucketdev.betapp.dto.user;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author rodrigo.loyola
  */
-@Getter
-@Setter
-public class UserFollowerDTO implements Serializable {
+@Data
+public class SubUserFollowerDTO implements Serializable {
 
     private long id;
     private String uid;
     private String displayName;
     private String description;
     private String photoUrl;
-    private List<SubUserFollowerDTO> following;
-    private List<SubUserFollowerDTO> followers;
+    private int followingCount;
+    private int followersCount;
 
 }
